@@ -63,7 +63,7 @@ class SortTest {
   @MethodSource("allSortingAlgorithms")
   void testIsSortedReturnsTrueForEmptyArray(@Nonnull final Sort<Integer> algorithm) {
     Assertions.assertTrue(algorithm.isSortedAsc(new Integer[]{}),
-                          algoName(algorithm) + ".isSortedAsc returns true for sorted array");
+                          algoName(algorithm) + ".isSortedAsc returns true for empty array");
   }
 
   @SuppressWarnings("ConstantConditions")
@@ -71,7 +71,7 @@ class SortTest {
   @MethodSource("allSortingAlgorithms")
   void testIsSortedThrowsNPEForNullArg(@Nonnull final Sort<Integer> algorithm) {
     Assertions.assertThrows(NullPointerException.class, () -> algorithm.isSortedAsc(null),
-                            algoName(algorithm) + ".isSortedAsc returns true for sorted array");
+                            algoName(algorithm) + ".isSortedAsc throws NPE for null argument");
   }
 
   @ParameterizedTest
@@ -90,10 +90,44 @@ class SortTest {
 
   @ParameterizedTest
   @MethodSource("allSortingAlgorithms")
-  void testSortLeavesArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
+  void testSortLeavesUnsortedArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
     algorithm.sort(unSortedArray);
     Assertions.assertTrue(algorithm.isSortedAsc(unSortedArray),
                           algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
+  }
+
+  @ParameterizedTest
+  @MethodSource("allSortingAlgorithms")
+  void testSortLeavesSortedArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
+    algorithm.sort(sortedArray);
+    Assertions.assertTrue(algorithm.isSortedAsc(sortedArray),
+                          algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
+  }
+
+  @ParameterizedTest
+  @MethodSource("allSortingAlgorithms")
+  void testSortLeavesOneElementArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
+    final Integer[] arr = {1};
+    algorithm.sort(arr);
+    Assertions.assertTrue(algorithm.isSortedAsc(arr),
+                          algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
+  }
+
+  @ParameterizedTest
+  @MethodSource("allSortingAlgorithms")
+  void testSortLeavesEmptyArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
+    final Integer[] arr = {};
+    algorithm.sort(arr);
+    Assertions.assertTrue(algorithm.isSortedAsc(arr),
+                          algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
+  }
+
+  @ParameterizedTest
+  @MethodSource("allSortingAlgorithms")
+  void testSortThrowsNPEForNullArg(@Nonnull final Sort<Integer> algorithm) {
+    Assertions.assertThrows(NullPointerException.class,
+                            () -> algorithm.sort(null),
+                            algoName(algorithm) + ".sort(null) throws NPE");
   }
 
   private String algoName(@Nonnull final Sort<Integer> algorithm) {
