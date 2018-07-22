@@ -55,22 +55,44 @@ class SortTest {
   @ParameterizedTest
   @MethodSource("allSortingAlgorithms")
   void testIsSortedReturnsTrueForSortedArray(@Nonnull final Sort<Integer> algorithm) {
-    Assertions.assertTrue(algorithm.isSorted(sortedArray),
-                          algoName(algorithm) + ".isSorted returns true for sorted array");
+    Assertions.assertTrue(algorithm.isSortedAsc(sortedArray),
+                          algoName(algorithm) + ".isSortedAsc returns true for sorted array");
+  }
+
+  @ParameterizedTest
+  @MethodSource("allSortingAlgorithms")
+  void testIsSortedReturnsTrueForEmptyArray(@Nonnull final Sort<Integer> algorithm) {
+    Assertions.assertTrue(algorithm.isSortedAsc(new Integer[]{}),
+                          algoName(algorithm) + ".isSortedAsc returns true for sorted array");
+  }
+
+  @SuppressWarnings("ConstantConditions")
+  @ParameterizedTest
+  @MethodSource("allSortingAlgorithms")
+  void testIsSortedThrowsNPEForNullArg(@Nonnull final Sort<Integer> algorithm) {
+    Assertions.assertThrows(NullPointerException.class, () -> algorithm.isSortedAsc(null),
+                            algoName(algorithm) + ".isSortedAsc returns true for sorted array");
+  }
+
+  @ParameterizedTest
+  @MethodSource("allSortingAlgorithms")
+  void testIsSortedReturnsTrueForOneElementArray(@Nonnull final Sort<Integer> algorithm) {
+    Assertions.assertTrue(algorithm.isSortedAsc(new Integer[]{1}),
+                          algoName(algorithm) + ".isSortedAsc returns true for sorted array");
   }
 
   @ParameterizedTest
   @MethodSource("allSortingAlgorithms")
   void testIsSortedReturnsFalseForUnsortedArray(@Nonnull final Sort<Integer> algorithm) {
-    Assertions.assertFalse(algorithm.isSorted(unSortedArray),
-                           algoName(algorithm) + ".isSorted returns false for unsorted array");
+    Assertions.assertFalse(algorithm.isSortedAsc(unSortedArray),
+                           algoName(algorithm) + ".isSortedAsc returns false for unsorted array");
   }
 
   @ParameterizedTest
   @MethodSource("allSortingAlgorithms")
   void testSortLeavesArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
     algorithm.sort(unSortedArray);
-    Assertions.assertTrue(algorithm.isSorted(unSortedArray),
+    Assertions.assertTrue(algorithm.isSortedAsc(unSortedArray),
                           algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
   }
 

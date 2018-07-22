@@ -10,14 +10,17 @@ import javax.annotation.Nullable;
 public abstract class AbstractSort<T extends Comparable<T>> implements Sort<T> {
   @Override
   public void sort(@Nullable final T[] arr) {
-    if (arr != null && arr.length > 0) {
+    if (arr == null) {
+      throw new NullPointerException();
+    }
+    if (arr.length > 1) {
       sortImpl(arr);
     }
   }
 
   @Override
-  public boolean isSorted(@Nonnull final T[] arr) {
-    if (arr.length < 2) {
+  public boolean isSortedAsc(@Nonnull final T[] arr) {
+    if (arr.length <= 1) {
       return true;
     } else {
       for (int i = 0; i < arr.length - 1; i++) {

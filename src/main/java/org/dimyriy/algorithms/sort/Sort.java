@@ -10,5 +10,5 @@ import javax.annotation.Nullable;
 public interface Sort<T extends Comparable<T>> {
   void sort(@Nullable T[] arr);
 
-  boolean isSorted(@Nonnull T[] arr);
+  boolean isSortedAsc(@Nonnull T[] arr);
 }
