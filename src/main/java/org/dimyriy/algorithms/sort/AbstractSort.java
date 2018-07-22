@@ -21,7 +21,7 @@ public abstract class AbstractSort<T extends Comparable<T>> implements Sort<T> {
       return true;
     } else {
       for (int i = 0; i < arr.length - 1; i++) {
-        if (arr[i].compareTo(arr[i + 1]) >= 0) {
+        if (arr[i].compareTo(arr[i + 1]) > 0) {
           return false;
         }
       }
