@@ -39,7 +39,7 @@ class SortTest {
 
   @BeforeAll
   static void setUpClass() {
-    final Reflections reflections = new Reflections();
+    final Reflections reflections = new Reflections("org.dimyriy.algorithms");
     final Set<Class<? extends Sort>> subTypesOf = reflections.getSubTypesOf(Sort.class);
     allSortingAlgorithms = subTypesOf.stream()
                                      .filter(t -> !t.isInterface() && !Modifier.isAbstract(t.getModifiers()))
