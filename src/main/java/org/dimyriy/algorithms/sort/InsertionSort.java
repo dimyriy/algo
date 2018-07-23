@@ -1,5 +1,7 @@
 package org.dimyriy.algorithms.sort;
 
+import org.dimyriy.util.ArrayUtil;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -11,7 +13,7 @@ public class InsertionSort<T extends Comparable<T>> extends AbstractSort<T> {
   void sortImpl(@Nonnull final T[] arr) {
     for (int i = 1; i < arr.length; i++) {
       for (int j = i; j > 0 && arr[j - 1].compareTo(arr[j]) > 0; j--) {
-        swap(arr, j, j - 1);
+        ArrayUtil.swap(arr, j, j - 1);
       }
     }
   }

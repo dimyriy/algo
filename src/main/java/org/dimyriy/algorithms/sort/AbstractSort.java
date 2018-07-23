@@ -32,11 +32,5 @@ public abstract class AbstractSort<T extends Comparable<T>> implements Sort<T> {
     }
   }
 
-  void swap(@Nonnull final T[] arr, final int i, final int j) {
-    final T t = arr[i];
-    arr[i] = arr[j];
-    arr[j] = t;
-  }
-
   abstract void sortImpl(@Nonnull final T[] arr);
 }
