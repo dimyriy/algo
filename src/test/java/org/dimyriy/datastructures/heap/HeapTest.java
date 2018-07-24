@@ -13,110 +13,130 @@ import java.util.Random;
  */
 class HeapTest {
   private static final Random RANDOM = new Random();
-  private Integer[] maxHeapArray;
-  private Integer[] nonMaxHeapArray;
+  private Integer[] maxHeapEvenLengthArray;
+  private Integer[] maxHeapOddLengthArray;
+  private Integer[] nonMaxHeapEvenLengthArray;
+  private Integer[] nonMaxHeapOddLengthArray;
   private Integer[] maxHeapTriadArray;
   private Integer[] nonMaxHeapTriadArray;
   private Integer[] randomArray;
 
   @BeforeEach
   void setUp() {
-    maxHeapArray = new Integer[]{16, 14, 10, 8, 7, 9, 3, 2, 4, 1};
-    nonMaxHeapArray = new Integer[]{16, 14, 10, 19, 8, 7, 9, 3, 2, 4, 1};
+    maxHeapEvenLengthArray = new Integer[]{16, 14, 10, 8, 7, 9, 3, 2, 4, 1, 0};
+    maxHeapOddLengthArray = new Integer[]{16, 14, 10, 8, 7, 9, 3, 2, 4, 1};
+    nonMaxHeapEvenLengthArray = new Integer[]{16, 14, 10, 19, 8, 7, 9, 3, 2, 4, 1};
+    nonMaxHeapOddLengthArray = new Integer[]{16, 14, 10, 19, 8, 7, 9, 3, 2, 4, 1, 14};
     maxHeapTriadArray = new Integer[]{3, 2, 1};
     nonMaxHeapTriadArray = new Integer[]{2, 3, 1};
-    randomArray = new Integer[RANDOM.nextInt(10000)];
+    randomArray = new Integer[100];
     for (int i = 0; i < randomArray.length; i++) {
-      randomArray[i] = RANDOM.nextInt();
+      randomArray[i] = RANDOM.nextInt(50);
     }
   }
 
   @Test
   void testIsMaxHeapReturnsTrueForZeroElementArray() {
-    Assertions.assertTrue(Heap.isMaxHeap(new Integer[]{}));
+    final Integer[] a = {};
+    Assertions.assertTrue(Heap.isMaxHeap(a, a.length));
   }
 
   @Test
   void testIsMaxHeapReturnsTrueForOneElementArray() {
-    Assertions.assertTrue(Heap.isMaxHeap(new Integer[]{1}));
+    final Integer[] a = {1};
+    Assertions.assertTrue(Heap.isMaxHeap(a, a.length));
   }
 
   @Test
   void testIsMaxHeapReturnsTrueForMaxHeapArray() {
-    Assertions.assertTrue(Heap.isMaxHeap(maxHeapArray));
+    Assertions.assertTrue(Heap.isMaxHeap(maxHeapEvenLengthArray, maxHeapEvenLengthArray.length));
   }
 
   @Test
   void testIsMaxHeapReturnsFalseForArrayWithNonMaxFirstElement() {
-    Assertions.assertFalse(Heap.isMaxHeap(new Integer[]{11, 14, 10, 8, 7, 9, 3, 2, 4, 1}));
+    final Integer[] a = {11, 14, 10, 8, 7, 9, 3, 2, 4, 1};
+    Assertions.assertFalse(Heap.isMaxHeap(a, a.length));
   }
 
   @Test
   void testIsMaxHeapReturnsFalseForNonMaxHeapArray() {
-    Assertions.assertFalse(Heap.isMaxHeap(nonMaxHeapArray));
+    Assertions.assertFalse(Heap.isMaxHeap(nonMaxHeapEvenLengthArray, nonMaxHeapEvenLengthArray.length));
   }
 
   @Test
   void testIsMaxHeapAtReturnsTrueMaxHeapForMaxHeapTriadArray() {
-    Assertions.assertTrue(Heap.isMaxHeapAt(new Integer[]{3, 2, 1}, 0));
+    final Integer[] a = {3, 2, 1};
+    Assertions.assertTrue(Heap.isMaxHeapAt(a, 0, a.length));
   }
 
   @Test
   void testIsMaxHeapAtReturnsTrueForLeftLeave() {
-    Assertions.assertTrue(Heap.isMaxHeapAt(maxHeapTriadArray, 1));
+    Assertions.assertTrue(Heap.isMaxHeapAt(maxHeapTriadArray, 1, maxHeapTriadArray.length));
   }
 
   @Test
   void testIsMaxHeapAtReturnsTrueForRightLeave() {
-    Assertions.assertTrue(Heap.isMaxHeapAt(maxHeapTriadArray, 2));
+    Assertions.assertTrue(Heap.isMaxHeapAt(maxHeapTriadArray, 2, maxHeapTriadArray.length));
   }
 
   @Test
   void testIsMaxHeapAtReturnsFalseMaxHeapForMaxHeapTriadArray() {
-    Assertions.assertFalse(Heap.isMaxHeapAt(nonMaxHeapTriadArray, 0));
+    Assertions.assertFalse(Heap.isMaxHeapAt(nonMaxHeapTriadArray, 0, nonMaxHeapTriadArray.length));
   }
 
   @Test
-  void testBuildMaxHeapCreatesMaxHeapFromMaxHeapArray() {
-    Heap.maxHeapify(maxHeapArray);
-    Assertions.assertTrue(Heap.isMaxHeap(maxHeapArray));
+  void testBuildMaxHeapCreatesMaxHeapFromMaxHeapArrayOfEventLength() {
+    Heap.buildMaxHeap(maxHeapEvenLengthArray, maxHeapEvenLengthArray.length);
+    Assertions.assertTrue(Heap.isMaxHeap(maxHeapEvenLengthArray, maxHeapEvenLengthArray.length));
   }
 
   @Test
-  void testBuildMaxHeapCreatesMaxHeapFromNonMaxHeapArray() {
-    Heap.maxHeapify(nonMaxHeapArray);
-    Assertions.assertTrue(Heap.isMaxHeap(nonMaxHeapArray));
+  void testBuildMaxHeapCreatesMaxHeapFromNonMaxHeapArrayOfEvenLength() {
+    Heap.buildMaxHeap(nonMaxHeapEvenLengthArray, nonMaxHeapEvenLengthArray.length);
+    Assertions.assertTrue(Heap.isMaxHeap(nonMaxHeapEvenLengthArray, nonMaxHeapEvenLengthArray.length));
+  }
+
+  @Test
+  void testBuildMaxHeapCreatesMaxHeapFromMaxHeapArrayOfOddLength() {
+    Heap.buildMaxHeap(maxHeapOddLengthArray, maxHeapOddLengthArray.length);
+    Assertions.assertTrue(Heap.isMaxHeap(maxHeapOddLengthArray, maxHeapOddLengthArray.length));
+  }
+
+  @Test
+  void testBuildMaxHeapCreatesMaxHeapFromNonMaxHeapArrayOfOddLength() {
+    Heap.buildMaxHeap(nonMaxHeapOddLengthArray, nonMaxHeapOddLengthArray.length);
+    Assertions.assertTrue(Heap.isMaxHeap(nonMaxHeapOddLengthArray, nonMaxHeapOddLengthArray.length));
   }
 
   @Test
   void testBuildMaxHeapCreatesMaxHeapFromMaxHeapTriadArray() {
-    Heap.maxHeapify(maxHeapTriadArray);
-    Assertions.assertTrue(Heap.isMaxHeap(maxHeapTriadArray));
+    Heap.buildMaxHeap(maxHeapTriadArray, maxHeapTriadArray.length);
+    Assertions.assertTrue(Heap.isMaxHeap(maxHeapTriadArray, maxHeapTriadArray.length));
   }
 
   @Test
   void testBuildMaxHeapCreatesMaxHeapFromNonMaxHeapTriadArray() {
-    Heap.maxHeapify(nonMaxHeapTriadArray);
-    Assertions.assertTrue(Heap.isMaxHeap(nonMaxHeapTriadArray));
+    Heap.buildMaxHeap(nonMaxHeapTriadArray, nonMaxHeapTriadArray.length);
+    Assertions.assertTrue(Heap.isMaxHeap(nonMaxHeapTriadArray, nonMaxHeapTriadArray.length));
   }
 
   @Test
   void testBuildMaxHeapCreatesMaxHeapFromRandomArray() {
-    Heap.maxHeapify(randomArray);
-    Assertions.assertTrue(Heap.isMaxHeap(randomArray));
+    Heap.buildMaxHeap(randomArray, randomArray.length);
+    Assertions.assertTrue(Heap.isMaxHeap(randomArray, randomArray.length));
   }
 
   @Test
-  void testBuildMaxHeapCreatesMaxHeapFromoneElementArray() {
+  void testBuildMaxHeapCreatesMaxHeapFromOneElementArray() {
     final Integer[] oneElementArray = new Integer[]{100};
-    Heap.maxHeapify(oneElementArray);
-    Assertions.assertTrue(Heap.isMaxHeap(oneElementArray));
+    Heap.buildMaxHeap(oneElementArray, oneElementArray.length);
+    Assertions.assertTrue(Heap.isMaxHeap(oneElementArray, oneElementArray.length));
   }
 
   @Test
   void testBuildMaxHeapCreatesMaxHeapFromZeroElementArray() {
     final Integer[] zeroElementArray = {};
-    Heap.maxHeapify(zeroElementArray);
-    Assertions.assertTrue(Heap.isMaxHeap(zeroElementArray));
+    Heap.buildMaxHeap(zeroElementArray, zeroElementArray.length);
+    Assertions.assertTrue(Heap.isMaxHeap(zeroElementArray, zeroElementArray.length));
   }
 }
