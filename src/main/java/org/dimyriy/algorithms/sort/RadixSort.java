@@ -6,7 +6,7 @@ import javax.annotation.Nonnull;
  * @author Dmitrii Bogdanov
  * Created at 28.07.18
  */
-@SuppressWarnings("SameParameterValue")
+@SuppressWarnings({"SameParameterValue", "unused"})
 public class RadixSort<T extends Comparable<T>> extends AbstractSort<T> {
   @Override
   void sortImpl(@Nonnull final T[] arr) {

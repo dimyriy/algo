@@ -33,4 +33,9 @@ public abstract class AbstractSort<T extends Comparable<T>> implements Sort<T> {
   }
 
   abstract void sortImpl(@Nonnull final T[] arr);
+
+  @Override
+  public boolean isFast() {
+    return true;
+  }
 }

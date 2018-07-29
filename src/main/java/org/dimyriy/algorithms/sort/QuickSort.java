@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
  * @author Dmitrii Bogdanov
  * Created at 28.07.18
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class QuickSort<T extends Comparable<T>> extends AbstractSort<T> {
   @Override
   void sortImpl(@Nonnull final T[] arr) {
@@ -23,7 +23,7 @@ public class QuickSort<T extends Comparable<T>> extends AbstractSort<T> {
     }
   }
 
-  private int partition(@Nonnull final T[] arr, final int lo, final int hi) {
+  int partition(@Nonnull final T[] arr, final int lo, final int hi) {
     final T pivot = arr[lo];
     int i = lo - 1;
     int j = hi + 1;

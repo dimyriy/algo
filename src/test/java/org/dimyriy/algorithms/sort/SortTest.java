@@ -10,6 +10,7 @@ import org.reflections.Reflections;
 import javax.annotation.Nonnull;
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,7 +20,8 @@ import java.util.stream.Stream;
  * Created at 22.07.18
  */
 class SortTest {
-
+  private static final Random RANDOM = new Random();
+  private static final int RELATIVELY_LARGE_ARRAY_SIZE = 1000000;
   private static List<Class<? extends Sort>> allSortingAlgorithms;
   private Integer[] sortedArray;
   private Integer[] unSortedArray;
@@ -35,6 +37,10 @@ class SortTest {
 
   private static Stream<Sort<Integer>> allSortingAlgorithms() {
     return allSortingAlgorithms.stream().map(SortTest::newInstanceSuppressed);
+  }
+
+  private static Stream<Sort<Integer>> fastSortingAlgorithms() {
+    return allSortingAlgorithms.stream().map(SortTest::newInstanceSuppressed).filter(Sort::isFast);
   }
 
   @BeforeAll
@@ -93,6 +99,18 @@ class SortTest {
   void testSortLeavesUnsortedArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
     algorithm.sort(unSortedArray);
     Assertions.assertTrue(algorithm.isSortedAsc(unSortedArray),
+                          algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
+  }
+
+  @ParameterizedTest
+  @MethodSource("fastSortingAlgorithms")
+  void testSortLeavesRelativelyLargeRandomlyGeneratedUnsortedArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
+    final Integer[] relativelyLargeRandomArray = new Integer[RELATIVELY_LARGE_ARRAY_SIZE];
+    for (int i = 0; i < relativelyLargeRandomArray.length; i++) {
+      relativelyLargeRandomArray[i] = RANDOM.nextInt(10000);
+    }
+    algorithm.sort(relativelyLargeRandomArray);
+    Assertions.assertTrue(algorithm.isSortedAsc(relativelyLargeRandomArray),
                           algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
   }
 
