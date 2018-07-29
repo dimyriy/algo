@@ -41,7 +41,9 @@ class BFS<T> implements PathSearch<T> {
     while (queue.size() != 0) {
       final AdjGraph.Vertex<T> node = queue.poll();
       if (node.equals(to)) {
-        visited.add(node);
+        if (!visited.contains(to)) {
+          visited.add(node);
+        }
         return visited;
       }
       for (final AdjGraph.Vertex<T> neighbor : graph.getNeighbors(node)) {

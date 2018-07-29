@@ -1,9 +1,10 @@
 package org.dimyriy.datastructures;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -11,17 +12,27 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created at 29.07.18
  */
 public class AdjGraph<T> {
-  private final Map<Vertex<T>, List<Vertex<T>>> adjacencyList = new ConcurrentHashMap<>();
+  private final Map<Vertex<T>, Map<Vertex<T>, Integer>> adjacencyList = new ConcurrentHashMap<>();
 
-  public void addNeighbor(@Nonnull final Vertex<T> v1, @Nonnull final Vertex<T> v2) {
-    final List<Vertex<T>> neighborsOfV1 = adjacencyList.computeIfAbsent(v1, vertex -> new ArrayList<>());
-    final List<Vertex<T>> neighborsOfV2 = adjacencyList.computeIfAbsent(v2, vertex -> new ArrayList<>());
-    neighborsOfV1.add(v2);
-    neighborsOfV2.add(v1);
+  public Set<Vertex<T>> allVertices() {
+    return adjacencyList.keySet();
   }
 
-  public List<Vertex<T>> getNeighbors(@Nonnull final Vertex<T> v) {
-    return adjacencyList.get(v);
+  public void addNeighbor(@Nonnull final Vertex<T> v1, @Nonnull final Vertex<T> v2, final int weight) {
+    final Map<Vertex<T>, Integer> neighborsOfV1 = adjacencyList.computeIfAbsent(v1, vertex -> new ConcurrentHashMap<>());
+    final Map<Vertex<T>, Integer> neighborsOfV2 = adjacencyList.computeIfAbsent(v2, vertex -> new ConcurrentHashMap<>());
+    neighborsOfV1.put(v2, weight);
+    neighborsOfV2.put(v1, weight);
+  }
+
+  public Collection<Vertex<T>> getNeighbors(@Nonnull final Vertex<T> v) {
+    final Map<Vertex<T>, Integer> vertexIntegerMap = adjacencyList.get(v);
+    return vertexIntegerMap == null ? Collections.emptyList() : vertexIntegerMap.keySet();
+  }
+
+  public Collection<Map.Entry<Vertex<T>, Integer>> getNeighborsWithWeights(@Nonnull final Vertex<T> v) {
+    final Map<Vertex<T>, Integer> vertexIntegerMap = adjacencyList.get(v);
+    return vertexIntegerMap == null ? Collections.emptyList() : vertexIntegerMap.entrySet();
   }
 
   public static class Vertex<T> {
