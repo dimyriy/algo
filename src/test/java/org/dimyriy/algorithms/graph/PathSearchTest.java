@@ -54,18 +54,18 @@ class PathSearchTest {
 
   private AdjGraph<Integer> createGraph() {
     final AdjGraph<Integer> graph = new AdjGraph<>();
-    createEdge(0, 1, graph);
-    createEdge(0, 2, graph);
-    createEdge(1, 2, graph);
-    createEdge(2, 0, graph);
-    createEdge(2, 3, graph);
+    createEdge(0, 1, graph, 1);
+    createEdge(0, 2, graph, 1);
+    createEdge(1, 2, graph, 1);
+    createEdge(2, 0, graph, 1);
+    createEdge(2, 3, graph, 1);
     return graph;
   }
 
-  private void createEdge(final int v1, final int v2, final AdjGraph<Integer> graph) {
+  void createEdge(final int v1, final int v2, final AdjGraph<Integer> graph, final int weight) {
     final AdjGraph.Vertex<Integer> vertex1 = verticesCache.computeIfAbsent(v1, integer -> new AdjGraph.Vertex<>(v1));
     final AdjGraph.Vertex<Integer> vertex2 = verticesCache.computeIfAbsent(v2, integer -> new AdjGraph.Vertex<>(v2));
-    graph.addNeighbor(vertex1, vertex2);
+    graph.addNeighbor(vertex1, vertex2, weight);
   }
 
 }

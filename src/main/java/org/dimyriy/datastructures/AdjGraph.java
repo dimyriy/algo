@@ -1,6 +1,7 @@
 package org.dimyriy.datastructures;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -35,6 +36,7 @@ public class AdjGraph<T> {
     return vertexIntegerMap == null ? Collections.emptyList() : vertexIntegerMap.entrySet();
   }
 
+  @Immutable
   public static class Vertex<T> {
     private final T value;
 
