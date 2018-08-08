@@ -1,6 +1,7 @@
 package org.dimyriy.util;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * @author Dmitrii Bogdanov
@@ -11,5 +12,9 @@ public class ArrayUtil {
     final T t = arr[i];
     arr[i] = arr[j];
     arr[j] = t;
+  }
+
+  public static <T> T lastElement(final List<T> list) {
+    return list.get(list.size() - 1);
   }
 }
