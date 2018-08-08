@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
  */
 @SuppressWarnings("unused")
 public class QuickPlusInsertionSort<T extends Comparable<T>> extends QuickSort<T> {
-  private static final int MAX_ARRAY_SIZE_FOR_QUICKSORT = 32;
+  private static final int MAX_ARRAY_SIZE_FOR_INSERTION_SORT = 32;
   private final InsertionSort<T> insertionSort = new InsertionSort<>();
 
   @Override
@@ -18,7 +18,7 @@ public class QuickPlusInsertionSort<T extends Comparable<T>> extends QuickSort<T
 
   private void quickSort(@Nonnull final T[] arr, final int lo, final int hi) {
     if (lo < hi) {
-      if (hi - lo < MAX_ARRAY_SIZE_FOR_QUICKSORT) {
+      if (hi - lo < MAX_ARRAY_SIZE_FOR_INSERTION_SORT) {
         insertionSort.sortImpl(arr, lo - 1, hi + 1);
       } else {
         final int partition = partition(arr, lo, hi);
