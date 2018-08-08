@@ -1,4 +1,4 @@
-package org.dimyriy.algorithms.neuralnets;
+package org.dimyriy.algorithms.neuralnet;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
