@@ -14,11 +14,19 @@ public class CollectionUtil {
     arr[j] = t;
   }
 
-  public static <T> T last(final List<T> list) {
-    return list.get(list.size() - 1);
-  }
-
   public static <T> T first(final List<T> list) {
     return list.get(0);
+  }
+
+  public static <T> T last(final List<T> list) {
+    return list.get(lastIndex(list));
+  }
+
+  public static <T> int lastIndex(final List<T> list) {
+    return list.size() - 1;
+  }
+
+  public static <T> int middle(final List<T> points) {
+    return points.size() / 2;
   }
 }

@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
  * Created at 22.07.18
  */
 public class MergeSort<T extends Comparable<T>> extends AbstractSort<T> {
+  private final InsertionSort<T> insertionSort = new InsertionSort<>();
 
   @Override
   void sortImpl(@Nonnull final T[] arr) {
@@ -17,6 +18,10 @@ public class MergeSort<T extends Comparable<T>> extends AbstractSort<T> {
   @SuppressWarnings("unchecked")
   private T[] sortRecursively(@Nonnull final T[] arr) {
     if (arr.length <= 1) {
+      return arr;
+    }
+    if (arr.length < AbstractSort.MAX_ARRAY_SIZE_FOR_INSERTION_SORT) {
+      insertionSort.sort(arr);
       return arr;
     }
     final int median = findMedian(arr);

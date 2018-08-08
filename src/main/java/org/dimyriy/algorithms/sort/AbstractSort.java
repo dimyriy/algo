@@ -8,6 +8,8 @@ import javax.annotation.Nullable;
  * Created at 22.07.18
  */
 public abstract class AbstractSort<T extends Comparable<T>> implements Sort<T> {
+  static final int MAX_ARRAY_SIZE_FOR_INSERTION_SORT = 7;
+
   @Override
   public void sort(@Nullable final T[] arr) {
     if (arr == null) {
