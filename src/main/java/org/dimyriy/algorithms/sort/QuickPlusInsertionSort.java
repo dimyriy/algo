@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
  */
 @SuppressWarnings("unused")
 public class QuickPlusInsertionSort<T extends Comparable<T>> extends QuickSort<T> {
-  private static final int MAX_ARRAY_SIZE_FOR_INSERTION_SORT = 32;
+  private static final int MAX_ARRAY_SIZE_FOR_INSERTION_SORT = 7;
   private final InsertionSort<T> insertionSort = new InsertionSort<>();
 
   @Override
