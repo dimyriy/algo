@@ -1,7 +1,7 @@
 package org.dimyriy.algorithms.sort;
 
 import org.dimyriy.datastructures.Heap;
-import org.dimyriy.util.ArrayUtil;
+import org.dimyriy.util.CollectionUtil;
 
 import javax.annotation.Nonnull;
 
@@ -15,7 +15,7 @@ public class HeapSort<T extends Comparable<T>> extends AbstractSort<T> {
     int size = arr.length;
     Heap.buildMaxHeap(arr, size);
     for (int i = size - 1; i > 0; i--) {
-      ArrayUtil.swap(arr, 0, i);
+      CollectionUtil.swap(arr, 0, i);
       size--;
       Heap.maxHeapify(arr, size, 0);
     }

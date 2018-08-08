@@ -1,6 +1,6 @@
 package org.dimyriy.datastructures;
 
-import org.dimyriy.util.ArrayUtil;
+import org.dimyriy.util.CollectionUtil;
 
 import javax.annotation.Nonnull;
 
@@ -37,7 +37,7 @@ public class Heap {
       largestElement = right;
     }
     if (largestElement != i) {
-      ArrayUtil.swap(arr, i, largestElement);
+      CollectionUtil.swap(arr, i, largestElement);
       maxHeapify(arr, size, largestElement);
     }
   }

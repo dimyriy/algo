@@ -1,6 +1,6 @@
 package org.dimyriy.algorithms.sort;
 
-import org.dimyriy.util.ArrayUtil;
+import org.dimyriy.util.CollectionUtil;
 
 import javax.annotation.Nonnull;
 
@@ -37,7 +37,7 @@ public class QuickSort<T extends Comparable<T>> extends AbstractSort<T> {
       if (i >= j) {
         return j;
       }
-      ArrayUtil.swap(arr, i, j);
+      CollectionUtil.swap(arr, i, j);
     }
   }
 }
