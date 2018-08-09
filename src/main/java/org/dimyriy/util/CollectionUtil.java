@@ -26,7 +26,29 @@ public class CollectionUtil {
     return list.size() - 1;
   }
 
-  public static <T> int middle(final List<T> points) {
-    return points.size() / 2;
+  public static <T> int middle(final List<T> list) {
+    return list.size() / 2;
+  }
+
+  public static <T> int incrementIndexCyclic(final List<T> list, final int i) {
+    if (i == list.size() - 1) {
+      if (list.isEmpty()) {
+        throw new ArrayIndexOutOfBoundsException(0);
+      }
+      return 0;
+    } else {
+      return i + 1;
+    }
+  }
+
+  public static <T> int decrementIndexCyclic(final List<T> list, final int i) {
+    if (i == 0) {
+      if (list.isEmpty()) {
+        throw new ArrayIndexOutOfBoundsException(0);
+      }
+      return list.size() - 1;
+    } else {
+      return i - 1;
+    }
   }
 }
