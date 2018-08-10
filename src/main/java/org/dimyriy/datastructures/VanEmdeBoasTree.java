@@ -7,22 +7,31 @@ import org.dimyriy.util.NumberUtil;
  * <p>
  * Created on 09.08.18
  */
-public class VanEmdeBoasTree {
-  private static final int MAX_UNIVERSE_SIZE = 1 << 31;
+class VanEmdeBoasTree {
+  private static final int MAX_UNIVERSE_SIZE = 1 << 30;
   private final int size;
   private NullableInt min = NullableInt.NULL;
   private NullableInt max = NullableInt.NULL;
   private VanEmdeBoasTree[] clusters = null;
   private VanEmdeBoasTree summary = null;
 
-  public VanEmdeBoasTree(final int size) {
+  VanEmdeBoasTree(final int size) {
+    if (size < 1) {
+      throw new IllegalArgumentException("Cannot create tree of size smaller then 1");
+    }
     if (!NumberUtil.isPowerOfTwo(size)) {
-      throw new IllegalArgumentException("Universe can only be a 6power of two size");
+      throw new IllegalArgumentException("Universe can only be a power of two size");
     }
     if (size > MAX_UNIVERSE_SIZE) {
-      throw new IllegalArgumentException("Size cannot be larger than " + Integer.MAX_VALUE);
+      throw new IllegalArgumentException("Size cannot be larger than " + MAX_UNIVERSE_SIZE);
     }
     this.size = size;
+  }
+
+  public void insert(final int x) {
+    if (min == NullableInt.NULL) {
+      min = new NullableInt(x);
+    }
   }
 
   private static final class NullableInt {
