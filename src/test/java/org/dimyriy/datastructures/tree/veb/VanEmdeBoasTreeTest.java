@@ -22,13 +22,18 @@ class VanEmdeBoasTreeTest {
   }
 
   @Test
+  void creatingTreeOfLessThanMinUniverseSizeThrowsException() {
+    assertThrows(IllegalArgumentException.class, () -> new VanEmdeBoasTree(1));
+  }
+
+  @Test
   void creatingTreeOfNonPowerOfTwoSizeThrowsException() {
     assertThrows(IllegalArgumentException.class, () -> new VanEmdeBoasTree(31));
   }
 
   @Test
   void creatingTreeOfZeroSizeThrowsException() {
-    assertThrows(IllegalArgumentException.class, () -> new VanEmdeBoasTree(31));
+    assertThrows(IllegalArgumentException.class, () -> new VanEmdeBoasTree(0));
   }
 
   @Test
