@@ -1,5 +1,8 @@
 package org.dimyriy.datastructures.tree.veb;
 
+import org.dimyriy.datastructures.tree.DeletionAware;
+import org.dimyriy.datastructures.tree.InsertionAware;
+import org.dimyriy.datastructures.tree.SuccessorAware;
 import org.dimyriy.util.NumberUtil;
 
 /**
@@ -7,13 +10,12 @@ import org.dimyriy.util.NumberUtil;
  * <p>
  * Created on 09.08.18
  */
-class VanEmdeBoasTree {
+class VanEmdeBoasTree implements SuccessorAware, InsertionAware, DeletionAware {
+  static final int NULL = Integer.MIN_VALUE;
   private static final int MIN_UNIVERSE_SIZE = 1 << 1;
   private static final int MAX_UNIVERSE_SIZE = 1 << 30;
-  private static final int NULL = Integer.MIN_VALUE;
   private final int lowMask;
   private final int highShift;
-  private final int size;
   private final int squareRootOfUniverseSize;
   @SuppressWarnings("PackageVisibleField")
   int min = Integer.MIN_VALUE;
@@ -32,12 +34,12 @@ class VanEmdeBoasTree {
     if (size > MAX_UNIVERSE_SIZE) {
       throw new IllegalArgumentException("Universe cannot be larger than " + MAX_UNIVERSE_SIZE);
     }
-    this.size = size;
     this.squareRootOfUniverseSize = size >> 1;
     this.lowMask = this.squareRootOfUniverseSize - 1;
     this.highShift = Integer.numberOfTrailingZeros(this.squareRootOfUniverseSize);
   }
 
+  @Override
   public void insert(final int x) {
     guard(x);
     if (min == NULL) {
@@ -47,20 +49,65 @@ class VanEmdeBoasTree {
     }
   }
 
+  @Override
   public int successor(final int x) {
+    if (min != NULL && x < min) {
+      return min;
+    } else {
+      if (clusters == null || summary == null) {
+        return NULL;
+      }
+      final int currentClusterIndex = high(x);
+      final VanEmdeBoasTree currentCluster = clusters[currentClusterIndex];
+      if (currentCluster != null && low(x) < currentCluster.max) {
+        return index(currentClusterIndex, currentCluster.successor(low(x)));
+      }
+      final int successorClusterIndex = summary.successor(currentClusterIndex);
+      if (successorClusterIndex == NULL || clusters[successorClusterIndex] == null) {
+        return NULL;
+      }
+      return index(successorClusterIndex, clusters[successorClusterIndex].min);
+    }
+  }
+
+  @Override public void delete(int x) {
     guard(x);
-    return 0;
+    if (min == max) {
+      min = NULL;
+      max = NULL;
+      return;
+    }
+
+    if (min == x) {
+      final int firstCluster = summary.min;
+      x = index(firstCluster, clusters[firstCluster].min);
+      min = x;
+    }
+    clusters[high(x)].delete(low(x));
+    if (clusters[high(x)].min == NULL) {
+      summary.delete(high(x));
+      if (x == max) {
+        final int summaryMax = summary.max;
+        if (summaryMax == NULL) {
+          max = min;
+        } else {
+          max = index(summaryMax, clusters[summaryMax].max);
+        }
+      }
+    } else if (x == max) {
+      max = index(high(x), clusters[high(x)].max);
+    }
   }
 
   protected void insertIntoNonEmptyTree(int x) {
-    if (x != min) {
+    if (x != min && x != max) {
       if (x < min) {
         final int tmp = x;
         x = min;
         min = tmp;
       }
       final int clusterIndex = high(x);
-      insertIntoCluster(x, clusterIndex);
+      insertIntoCluster(clusterIndex, low(x));
       if (x > max) {
         max = x;
       }
@@ -92,19 +139,23 @@ class VanEmdeBoasTree {
     return x & lowMask;
   }
 
+  private int index(final int x, final int y) {
+    return (x << highShift) | (y & lowMask);
+  }
+
   private void insertIntoEmptyTree(final int x) {
     this.min = x;
     this.max = x;
   }
 
-  private void insertIntoCluster(final int x, final int clusterIndex) {
+  private void insertIntoCluster(final int clusterIndex, final int elementIndex) {
     createClusterAndSummaryIfNecessary(clusterIndex);
     final VanEmdeBoasTree cluster = clusters[clusterIndex];
     final int clusterMin = cluster.min;
     if (clusterMin == NULL) {
-      cluster.insertIntoEmptyTree(x);
+      cluster.insertIntoEmptyTree(elementIndex);
     } else {
-      cluster.insert(x);
+      cluster.insert(elementIndex);
     }
   }
 
@@ -132,10 +183,24 @@ class VanEmdeBoasTree {
     @Override public int successor(final int x) {
       if (x < min) {
         return min;
-      } else if (x > max) {
-        return NULL;
-      } else {
+      } else if (x < max) {
         return max;
+      } else {
+        return NULL;
+      }
+    }
+
+    @Override public void delete(final int x) {
+      if (max == min) {
+        max = NULL;
+        min = NULL;
+      } else {
+        if (x == 0) {
+          min = 1;
+        } else {
+          max = 0;
+        }
+        max = min;
       }
     }
 
