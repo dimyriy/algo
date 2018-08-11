@@ -20,6 +20,26 @@ class Dijkstra<T> {
     this.graph = graph;
   }
 
+  List<AdjGraph.Vertex<T>> findShortestPath(@Nonnull final AdjGraph.Vertex<T> source, @Nonnull final AdjGraph.Vertex<T> target) {
+    guard(source, target);
+    if (source.equals(target)) {
+      return Collections.singletonList(source);
+    }
+    findAllPaths(source);
+    final Node<AdjGraph.Vertex<T>> targetNode = allNodes.get(target);
+    if (targetNode == null) {
+      return null;
+    } else {
+      return findPathToNode(targetNode);
+    }
+  }
+
+  private void guard(@Nonnull final AdjGraph.Vertex<T> source, @Nonnull final AdjGraph.Vertex<T> target) {
+    if (graph.getNeighborsWithWeights(source).isEmpty() || graph.getNeighborsWithWeights(target).isEmpty()) {
+      throw new IllegalStateException("Graph is malformed");
+    }
+  }
+
   private void findAllPaths(@Nonnull final AdjGraph.Vertex<T> source) {
     initialize(source);
     while (!shortestNodesQueue.isEmpty()) {
@@ -27,6 +47,30 @@ class Dijkstra<T> {
       graph.getNeighborsWithWeights(currentShortestNode.vertex).forEach(vertexWithEdge -> processNeighbor(currentShortestNode, vertexWithEdge));
       currentShortestNode.visited = true;
     }
+  }
+
+  private List<AdjGraph.Vertex<T>> findPathToNode(Node<AdjGraph.Vertex<T>> currentLastNode) {
+    final List<AdjGraph.Vertex<T>> path = new ArrayList<>();
+    path.add(currentLastNode.vertex);
+    while (currentLastNode.predecessor != null) {
+      path.add(currentLastNode.predecessor.vertex);
+      currentLastNode = currentLastNode.predecessor;
+    }
+    Collections.reverse(path);
+    return path;
+  }
+
+  private void initialize(final AdjGraph.Vertex<T> source) {
+    shortestNodesQueue.clear();
+    allNodes.clear();
+    final Node<AdjGraph.Vertex<T>> sourceNode = new Node<>(source);
+    sourceNode.cost = 0;
+    shortestNodesQueue.add(sourceNode);
+    allNodes.put(source, sourceNode);
+    graph.allVertices().stream().filter(s -> !s.equals(source)).map(Node::new).forEach(s -> {
+      shortestNodesQueue.add(s);
+      allNodes.put(s.vertex, s);
+    });
   }
 
   private void processNeighbor(final Node<AdjGraph.Vertex<T>> currentShortestNode, final Map.Entry<AdjGraph.Vertex<T>, Integer> vertexWithEdge) {
@@ -54,50 +98,6 @@ class Dijkstra<T> {
     shortestNodesQueue.add(node);
   }
 
-  private void initialize(final AdjGraph.Vertex<T> source) {
-    shortestNodesQueue.clear();
-    allNodes.clear();
-    final Node<AdjGraph.Vertex<T>> sourceNode = new Node<>(source);
-    sourceNode.cost = 0;
-    shortestNodesQueue.add(sourceNode);
-    allNodes.put(source, sourceNode);
-    graph.allVertices().stream().filter(s -> !s.equals(source)).map(Node::new).forEach(s -> {
-      shortestNodesQueue.add(s);
-      allNodes.put(s.vertex, s);
-    });
-  }
-
-  List<AdjGraph.Vertex<T>> findShortestPath(@Nonnull final AdjGraph.Vertex<T> source, @Nonnull final AdjGraph.Vertex<T> target) {
-    guard(source, target);
-    if (source.equals(target)) {
-      return Collections.singletonList(source);
-    }
-    findAllPaths(source);
-    final Node<AdjGraph.Vertex<T>> targetNode = allNodes.get(target);
-    if (targetNode == null) {
-      return null;
-    } else {
-      return findPathToNode(targetNode);
-    }
-  }
-
-  private List<AdjGraph.Vertex<T>> findPathToNode(Node<AdjGraph.Vertex<T>> currentLastNode) {
-    final List<AdjGraph.Vertex<T>> path = new ArrayList<>();
-    path.add(currentLastNode.vertex);
-    while (currentLastNode.predecessor != null) {
-      path.add(currentLastNode.predecessor.vertex);
-      currentLastNode = currentLastNode.predecessor;
-    }
-    Collections.reverse(path);
-    return path;
-  }
-
-  private void guard(@Nonnull final AdjGraph.Vertex<T> source, @Nonnull final AdjGraph.Vertex<T> target) {
-    if (graph.getNeighborsWithWeights(source).isEmpty() || graph.getNeighborsWithWeights(target).isEmpty()) {
-      throw new IllegalStateException("Graph is malformed");
-    }
-  }
-
   private static class Node<T> implements Comparable<Node<T>> {
     private final T vertex;
     private int cost = Integer.MAX_VALUE;
@@ -114,6 +114,11 @@ class Dijkstra<T> {
     }
 
     @Override
+    public int hashCode() {
+      return vertex.hashCode();
+    }
+
+    @Override
     public boolean equals(final Object o) {
       if (this == o) return true;
       if (!(o instanceof Node)) return false;
@@ -121,11 +126,6 @@ class Dijkstra<T> {
       final Node<?> node = (Node<?>) o;
 
       return vertex.equals(node.vertex);
-    }
-
-    @Override
-    public int hashCode() {
-      return vertex.hashCode();
     }
   }
 }

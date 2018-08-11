@@ -15,14 +15,6 @@ public class QuickSort<T extends Comparable<T>> extends AbstractSort<T> {
     quickSort(arr, 0, arr.length - 1);
   }
 
-  private void quickSort(@Nonnull final T[] arr, final int lo, final int hi) {
-    if (lo < hi) {
-      final int partition = partition(arr, lo, hi);
-      quickSort(arr, lo, partition);
-      quickSort(arr, partition + 1, hi);
-    }
-  }
-
   int partition(@Nonnull final T[] arr, final int lo, final int hi) {
     final T pivot = arr[lo];
     int i = lo - 1;
@@ -38,6 +30,14 @@ public class QuickSort<T extends Comparable<T>> extends AbstractSort<T> {
         return j;
       }
       CollectionUtil.swap(arr, i, j);
+    }
+  }
+
+  private void quickSort(@Nonnull final T[] arr, final int lo, final int hi) {
+    if (lo < hi) {
+      final int partition = partition(arr, lo, hi);
+      quickSort(arr, lo, partition);
+      quickSort(arr, partition + 1, hi);
     }
   }
 }

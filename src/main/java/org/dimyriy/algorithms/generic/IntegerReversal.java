@@ -28,19 +28,6 @@ class IntegerReversal {
     return !isNegative ? result : -result;
   }
 
-  int getIthDigit(final int number, final int i) {
-    final int divisor = powerOf10(i - 1);
-    return (number - number % divisor) / divisor;
-  }
-
-  private int getIthDigit(final int number, final int i, final int divisor) {
-    return (number - number % divisor) / divisor;
-  }
-
-  private int powerOf10(final int exp) {
-    return (int) Math.pow(10, exp);
-  }
-
   int nDigits(int number) {
     if (number < 0) {
       number = -number;
@@ -49,5 +36,18 @@ class IntegerReversal {
       return 1;
     }
     return (int) Math.floor(Math.log10(number)) + 1;
+  }
+
+  int getIthDigit(final int number, final int i) {
+    final int divisor = powerOf10(i - 1);
+    return (number - number % divisor) / divisor;
+  }
+
+  private int powerOf10(final int exp) {
+    return (int) Math.pow(10, exp);
+  }
+
+  private int getIthDigit(final int number, final int i, final int divisor) {
+    return (number - number % divisor) / divisor;
   }
 }

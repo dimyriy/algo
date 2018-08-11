@@ -18,6 +18,21 @@ public class Heap {
     return true;
   }
 
+  public static <T extends Comparable<T>> boolean isMaxHeapAt(final T[] arr, final int i, final int size) {
+    guard(i, size);
+    if (isLeave(i, size)) {
+      return true;
+    } else {
+      final int left = left(i);
+      final int right = right(i);
+      if (right >= size) {
+        return arr[i].compareTo(arr[left]) >= 0;
+      } else {
+        return arr[i].compareTo(arr[left]) >= 0 && arr[i].compareTo(arr[right]) >= 0;
+      }
+    }
+  }
+
   public static <T extends Comparable<T>> void buildMaxHeap(@Nonnull final T[] arr, final int size) {
     for (int i = size / 2; i > -1; i--) {
       maxHeapify(arr, size, i);
@@ -42,19 +57,15 @@ public class Heap {
     }
   }
 
-  public static <T extends Comparable<T>> boolean isMaxHeapAt(final T[] arr, final int i, final int size) {
-    guard(i, size);
-    if (isLeave(i, size)) {
-      return true;
-    } else {
-      final int left = left(i);
-      final int right = right(i);
-      if (right >= size) {
-        return arr[i].compareTo(arr[left]) >= 0;
-      } else {
-        return arr[i].compareTo(arr[left]) >= 0 && arr[i].compareTo(arr[right]) >= 0;
-      }
+  private static void guard(final int i, final int size) {
+    if (i != 0 && i >= size) {
+      throw new HeapIndexOutOfBoundsException(i);
     }
+  }
+
+  private static boolean isLeave(final int i, final int size) {
+    guard(i, size);
+    return right(i) > size;
   }
 
   private static int left(final int i) {
@@ -63,17 +74,6 @@ public class Heap {
 
   private static int right(final int i) {
     return 2 * i + 2;
-  }
-
-  private static boolean isLeave(final int i, final int size) {
-    guard(i, size);
-    return right(i) > size;
-  }
-
-  private static void guard(final int i, final int size) {
-    if (i != 0 && i >= size) {
-      throw new HeapIndexOutOfBoundsException(i);
-    }
   }
 
   private static class HeapIndexOutOfBoundsException extends IndexOutOfBoundsException {

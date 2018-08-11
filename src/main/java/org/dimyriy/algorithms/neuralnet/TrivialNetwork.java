@@ -44,6 +44,18 @@ public class TrivialNetwork {
     return z(y(x));
   }
 
+  public int getNumberOfIterations() {
+    return numberOfIterations;
+  }
+
+  private double y(final double x) {
+    return weights[0] * sigmaFunction(x);
+  }
+
+  private double z(final double y) {
+    return weights[1] * sigmaFunction(y);
+  }
+
   private double error(final double d, final double z) {
     final double dMinusZ = d - z;
     return -0.5 * dMinusZ * dMinusZ;
@@ -51,17 +63,5 @@ public class TrivialNetwork {
 
   private double sigmaFunction(final double alpha) {
     return 1. / (1. + Math.exp(-alpha));
-  }
-
-  private double z(final double y) {
-    return weights[1] * sigmaFunction(y);
-  }
-
-  private double y(final double x) {
-    return weights[0] * sigmaFunction(x);
-  }
-
-  public int getNumberOfIterations() {
-    return numberOfIterations;
   }
 }

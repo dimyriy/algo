@@ -13,16 +13,8 @@ public class AvlTree {
     this.root = null;
   }
 
-  private static int height(final Node node) {
-    if (node == null)
-      return 0;
-    return node.height;
-  }
-
-  private static int balance(final Node node) {
-    if (node == null)
-      return 0;
-    return height(node.left) - height(node.right);
+  public Node getRoot() {
+    return root;
   }
 
   void add(final int value) {
@@ -38,6 +30,14 @@ public class AvlTree {
       return true;
     } else {
       return root.isBst();
+    }
+  }
+
+  boolean isBalanced() {
+    if (root == null) {
+      return true;
+    } else {
+      return root.isBalanced();
     }
   }
 
@@ -105,16 +105,16 @@ public class AvlTree {
     return newParent;
   }
 
-  boolean isBalanced() {
-    if (root == null) {
-      return true;
-    } else {
-      return root.isBalanced();
-    }
+  private static int height(final Node node) {
+    if (node == null)
+      return 0;
+    return node.height;
   }
 
-  public Node getRoot() {
-    return root;
+  private static int balance(final Node node) {
+    if (node == null)
+      return 0;
+    return height(node.left) - height(node.right);
   }
 
   public static class Node {

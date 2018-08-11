@@ -10,6 +10,11 @@ import javax.annotation.Nonnull;
  */
 public class InsertionSort<T extends Comparable<T>> extends AbstractSort<T> {
   @Override
+  public boolean isFast() {
+    return false;
+  }
+
+  @Override
   void sortImpl(@Nonnull final T[] arr) {
     sortImpl(arr, 0, arr.length);
   }
@@ -20,10 +25,5 @@ public class InsertionSort<T extends Comparable<T>> extends AbstractSort<T> {
         CollectionUtil.swap(arr, j, j - 1);
       }
     }
-  }
-
-  @Override
-  public boolean isFast() {
-    return false;
   }
 }

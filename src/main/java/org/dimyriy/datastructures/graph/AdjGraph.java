@@ -45,6 +45,11 @@ public class AdjGraph<T> {
     }
 
     @Override
+    public int hashCode() {
+      return value.hashCode();
+    }
+
+    @Override
     public boolean equals(final Object o) {
       if (this == o) return true;
       if (!(o instanceof Vertex)) return false;
@@ -52,11 +57,6 @@ public class AdjGraph<T> {
       final Vertex<?> vertex = (Vertex<?>) o;
 
       return value.equals(vertex.value);
-    }
-
-    @Override
-    public int hashCode() {
-      return value.hashCode();
     }
 
     @Override

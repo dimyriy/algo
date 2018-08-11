@@ -26,32 +26,6 @@ class SortTest {
   private Integer[] sortedArray;
   private Integer[] unSortedArray;
 
-  @SuppressWarnings("unchecked")
-  private static Sort<Integer> newInstanceSuppressed(@Nonnull final Class<? extends Sort> type) {
-    try {
-      return (Sort<Integer>) type.newInstance();
-    } catch (InstantiationException | IllegalAccessException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  private static Stream<Sort<Integer>> allSortingAlgorithms() {
-    return allSortingAlgorithms.stream().map(SortTest::newInstanceSuppressed);
-  }
-
-  private static Stream<Sort<Integer>> fastSortingAlgorithms() {
-    return allSortingAlgorithms.stream().map(SortTest::newInstanceSuppressed).filter(Sort::isFast);
-  }
-
-  @BeforeAll
-  static void setUpClass() {
-    final Reflections reflections = new Reflections("org.dimyriy.algorithms");
-    final Set<Class<? extends Sort>> subTypesOf = reflections.getSubTypesOf(Sort.class);
-    allSortingAlgorithms = subTypesOf.stream()
-                                     .filter(t -> !t.isInterface() && !Modifier.isAbstract(t.getModifiers()))
-                                     .collect(Collectors.toList());
-  }
-
   @BeforeEach
   void setUp() {
     sortedArray = new Integer[]{1, 2, 3, 3, 4, 5, 6, 10, 150, Integer.MAX_VALUE};
@@ -150,5 +124,31 @@ class SortTest {
 
   private String algoName(@Nonnull final Sort<Integer> algorithm) {
     return algorithm.getClass().getSimpleName();
+  }
+
+  @BeforeAll
+  static void setUpClass() {
+    final Reflections reflections = new Reflections("org.dimyriy.algorithms");
+    final Set<Class<? extends Sort>> subTypesOf = reflections.getSubTypesOf(Sort.class);
+    allSortingAlgorithms = subTypesOf.stream()
+                                     .filter(t -> !t.isInterface() && !Modifier.isAbstract(t.getModifiers()))
+                                     .collect(Collectors.toList());
+  }
+
+  @SuppressWarnings("unchecked")
+  private static Sort<Integer> newInstanceSuppressed(@Nonnull final Class<? extends Sort> type) {
+    try {
+      return (Sort<Integer>) type.newInstance();
+    } catch (InstantiationException | IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private static Stream<Sort<Integer>> allSortingAlgorithms() {
+    return allSortingAlgorithms.stream().map(SortTest::newInstanceSuppressed);
+  }
+
+  private static Stream<Sort<Integer>> fastSortingAlgorithms() {
+    return allSortingAlgorithms.stream().map(SortTest::newInstanceSuppressed).filter(Sort::isFast);
   }
 }

@@ -15,23 +15,6 @@ class BFS<T> implements PathSearch<T> {
     this.graph = graph;
   }
 
-  public List<AdjGraph.Vertex<T>> traverse(final AdjGraph.Vertex<T> s) {
-    final List<AdjGraph.Vertex<T>> visited = new LinkedList<>();
-    final Queue<AdjGraph.Vertex<T>> queue = new ArrayDeque<>();
-    visited.add(s);
-    queue.add(s);
-    while (queue.size() != 0) {
-      final AdjGraph.Vertex<T> node = queue.poll();
-      for (final AdjGraph.Vertex<T> neighbor : graph.getNeighbors(node)) {
-        if (!visited.contains(neighbor)) {
-          queue.add(node);
-          visited.add(neighbor);
-        }
-      }
-    }
-    return visited;
-  }
-
   @Override
   public List<AdjGraph.Vertex<T>> searchPath(final AdjGraph.Vertex<T> s, final AdjGraph.Vertex<T> to) {
     final List<AdjGraph.Vertex<T>> visited = new LinkedList<>();
@@ -54,5 +37,22 @@ class BFS<T> implements PathSearch<T> {
       }
     }
     return Collections.emptyList();
+  }
+
+  public List<AdjGraph.Vertex<T>> traverse(final AdjGraph.Vertex<T> s) {
+    final List<AdjGraph.Vertex<T>> visited = new LinkedList<>();
+    final Queue<AdjGraph.Vertex<T>> queue = new ArrayDeque<>();
+    visited.add(s);
+    queue.add(s);
+    while (queue.size() != 0) {
+      final AdjGraph.Vertex<T> node = queue.poll();
+      for (final AdjGraph.Vertex<T> neighbor : graph.getNeighbors(node)) {
+        if (!visited.contains(neighbor)) {
+          queue.add(node);
+          visited.add(neighbor);
+        }
+      }
+    }
+    return visited;
   }
 }

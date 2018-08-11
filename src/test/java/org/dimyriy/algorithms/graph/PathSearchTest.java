@@ -37,19 +37,16 @@ class PathSearchTest {
     Assert.assertEquals(expectedPath(), new BFS<>(graph).traverse(new AdjGraph.Vertex<>(2)));
   }
 
+  void createEdge(final int v1, final int v2, final AdjGraph<Integer> graph, final int weight) {
+    final AdjGraph.Vertex<Integer> vertex1 = verticesCache.computeIfAbsent(v1, integer -> new AdjGraph.Vertex<>(v1));
+    final AdjGraph.Vertex<Integer> vertex2 = verticesCache.computeIfAbsent(v2, integer -> new AdjGraph.Vertex<>(v2));
+    graph.addNeighbor(vertex1, vertex2, weight);
+  }
+
   @Test
   void depthFirstSearchTraverseFindsCorrectPaths() {
     final AdjGraph<Integer> graph = createGraph();
     Assert.assertEquals(expectedPath(), new DFS<>(graph).traverse(new AdjGraph.Vertex<>(2)));
-  }
-
-  private List<AdjGraph.Vertex<Integer>> expectedPath() {
-    final List<AdjGraph.Vertex<Integer>> expectedPath = new LinkedList<>();
-    expectedPath.add(new AdjGraph.Vertex<>(2));
-    expectedPath.add(new AdjGraph.Vertex<>(0));
-    expectedPath.add(new AdjGraph.Vertex<>(1));
-    expectedPath.add(new AdjGraph.Vertex<>(3));
-    return expectedPath;
   }
 
   private AdjGraph<Integer> createGraph() {
@@ -62,10 +59,13 @@ class PathSearchTest {
     return graph;
   }
 
-  void createEdge(final int v1, final int v2, final AdjGraph<Integer> graph, final int weight) {
-    final AdjGraph.Vertex<Integer> vertex1 = verticesCache.computeIfAbsent(v1, integer -> new AdjGraph.Vertex<>(v1));
-    final AdjGraph.Vertex<Integer> vertex2 = verticesCache.computeIfAbsent(v2, integer -> new AdjGraph.Vertex<>(v2));
-    graph.addNeighbor(vertex1, vertex2, weight);
+  private List<AdjGraph.Vertex<Integer>> expectedPath() {
+    final List<AdjGraph.Vertex<Integer>> expectedPath = new LinkedList<>();
+    expectedPath.add(new AdjGraph.Vertex<>(2));
+    expectedPath.add(new AdjGraph.Vertex<>(0));
+    expectedPath.add(new AdjGraph.Vertex<>(1));
+    expectedPath.add(new AdjGraph.Vertex<>(3));
+    return expectedPath;
   }
 
 }
