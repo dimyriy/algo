@@ -31,6 +31,7 @@ class VanEmdeBoasTree {
   public void insert(final int x) {
     if (min == NullableInt.NULL) {
       min = new NullableInt(x);
+      max = new NullableInt(x);
     }
   }
 
