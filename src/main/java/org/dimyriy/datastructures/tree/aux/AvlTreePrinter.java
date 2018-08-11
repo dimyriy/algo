@@ -1,6 +1,6 @@
-package org.dimyriy.aux;
+package org.dimyriy.datastructures.tree.aux;
 
-import org.dimyriy.datastructures.AvlTree;
+import org.dimyriy.datastructures.tree.AvlTree;
 
 import javax.annotation.Nonnull;
 import java.io.PrintStream;

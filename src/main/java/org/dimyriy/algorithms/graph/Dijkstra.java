@@ -1,6 +1,6 @@
 package org.dimyriy.algorithms.graph;
 
-import org.dimyriy.datastructures.AdjGraph;
+import org.dimyriy.datastructures.graph.AdjGraph;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;

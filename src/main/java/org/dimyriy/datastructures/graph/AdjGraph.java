@@ -1,4 +1,4 @@
-package org.dimyriy.datastructures;
+package org.dimyriy.datastructures.graph;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;

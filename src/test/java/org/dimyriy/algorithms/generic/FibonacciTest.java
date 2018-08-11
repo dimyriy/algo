@@ -3,8 +3,6 @@ package org.dimyriy.algorithms.generic;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * @author Dmitrii Bogdanov
  * Created at 29.07.18

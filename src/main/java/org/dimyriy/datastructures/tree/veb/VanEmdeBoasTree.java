@@ -1,4 +1,4 @@
-package org.dimyriy.datastructures;
+package org.dimyriy.datastructures.tree.veb;
 
 import org.dimyriy.util.NumberUtil;
 
@@ -26,6 +26,10 @@ class VanEmdeBoasTree {
       throw new IllegalArgumentException("Size cannot be larger than " + MAX_UNIVERSE_SIZE);
     }
     this.size = size;
+  }
+
+  public static int high(final int x) {
+    return 0;
   }
 
   public void insert(final int x) {

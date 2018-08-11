@@ -1,4 +1,4 @@
-package org.dimyriy.datastructures;
+package org.dimyriy.datastructures.tree.veb;
 
 import org.junit.jupiter.api.Test;
 

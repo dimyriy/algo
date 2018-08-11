@@ -1,6 +1,6 @@
 package org.dimyriy.algorithms.graph;
 
-import org.dimyriy.datastructures.AdjGraph;
+import org.dimyriy.datastructures.graph.AdjGraph;
 
 import java.util.List;
 
@@ -10,5 +10,6 @@ import java.util.List;
  */
 public interface PathSearch<T> {
   List<AdjGraph.Vertex<T>> searchPath(final AdjGraph.Vertex<T> s, final AdjGraph.Vertex<T> to);
+
   List<AdjGraph.Vertex<T>> traverse(final AdjGraph.Vertex<T> s);
 }

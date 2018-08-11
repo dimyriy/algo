@@ -1,4 +1,4 @@
-package org.dimyriy.datastructures;
+package org.dimyriy.datastructures.tree;
 
 import static java.lang.Math.max;
 

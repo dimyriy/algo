@@ -1,4 +1,4 @@
-package org.dimyriy.datastructures;
+package org.dimyriy.datastructures.heap;
 
 import org.dimyriy.util.CollectionUtil;
 

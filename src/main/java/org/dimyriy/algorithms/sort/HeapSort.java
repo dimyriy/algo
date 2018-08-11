@@ -1,6 +1,6 @@
 package org.dimyriy.algorithms.sort;
 
-import org.dimyriy.datastructures.Heap;
+import org.dimyriy.datastructures.heap.Heap;
 import org.dimyriy.util.CollectionUtil;
 
 import javax.annotation.Nonnull;
