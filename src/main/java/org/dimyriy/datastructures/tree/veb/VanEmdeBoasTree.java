@@ -22,7 +22,7 @@ class VanEmdeBoasTree {
   private VanEmdeBoasTree[] clusters = null;
   private VanEmdeBoasTree summary = null;
 
-  VanEmdeBoasTree(final int size) {
+  private VanEmdeBoasTree(final int size) {
     if (size < MIN_UNIVERSE_SIZE) {
       throw new IllegalArgumentException("Cannot create tree of universe size smaller then " + MIN_UNIVERSE_SIZE);
     }
@@ -49,7 +49,7 @@ class VanEmdeBoasTree {
 
   public int successor(final int x) {
     guard(x);
-
+    return 0;
   }
 
   protected void insertIntoNonEmptyTree(int x) {
@@ -108,6 +108,14 @@ class VanEmdeBoasTree {
     }
   }
 
+  static VanEmdeBoasTree create(final int size) {
+    if (size == MIN_UNIVERSE_SIZE) {
+      return new VanEmdeBoasTreeOfMinUniverseSize();
+    } else {
+      return new VanEmdeBoasTree(size);
+    }
+  }
+
   private static void guard(final int x) {
     if (x < 0) {
       throw new IllegalArgumentException("Negative integers are not allowed");
@@ -116,15 +124,7 @@ class VanEmdeBoasTree {
     }
   }
 
-  private static VanEmdeBoasTree create(final int size) {
-    if (size == MIN_UNIVERSE_SIZE) {
-      return new VanEmdeBoasTreeOfMinUniverseSize();
-    } else {
-      return new VanEmdeBoasTree(size);
-    }
-  }
-
-  private static class VanEmdeBoasTreeOfMinUniverseSize extends VanEmdeBoasTree {
+  static class VanEmdeBoasTreeOfMinUniverseSize extends VanEmdeBoasTree {
     VanEmdeBoasTreeOfMinUniverseSize() {
       super(2);
     }
