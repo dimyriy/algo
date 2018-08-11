@@ -8,66 +8,154 @@ import org.dimyriy.util.NumberUtil;
  * Created on 09.08.18
  */
 class VanEmdeBoasTree {
+  private static final int MIN_UNIVERSE_SIZE = 1 << 1;
   private static final int MAX_UNIVERSE_SIZE = 1 << 30;
+  private static final int NULL = Integer.MIN_VALUE;
+  private final int lowMask;
+  private final int highShift;
   private final int size;
-  private NullableInt min = NullableInt.NULL;
-  private NullableInt max = NullableInt.NULL;
+  private final int squareRootOfUniverseSize;
+  @SuppressWarnings("PackageVisibleField")
+  int min = Integer.MIN_VALUE;
+  @SuppressWarnings("PackageVisibleField")
+  int max = NULL;
   private VanEmdeBoasTree[] clusters = null;
   private VanEmdeBoasTree summary = null;
 
   VanEmdeBoasTree(final int size) {
-    if (size < 1) {
-      throw new IllegalArgumentException("Cannot create tree of size smaller then 1");
+    if (size < MIN_UNIVERSE_SIZE) {
+      throw new IllegalArgumentException("Cannot create tree of universe size smaller then " + MIN_UNIVERSE_SIZE);
     }
     if (!NumberUtil.isPowerOfTwo(size)) {
       throw new IllegalArgumentException("Universe can only be a power of two size");
     }
     if (size > MAX_UNIVERSE_SIZE) {
-      throw new IllegalArgumentException("Size cannot be larger than " + MAX_UNIVERSE_SIZE);
+      throw new IllegalArgumentException("Universe cannot be larger than " + MAX_UNIVERSE_SIZE);
     }
     this.size = size;
-  }
-
-  public static int high(final int x) {
-    return 0;
+    this.squareRootOfUniverseSize = size >> 1;
+    this.lowMask = this.squareRootOfUniverseSize - 1;
+    this.highShift = Integer.numberOfTrailingZeros(this.squareRootOfUniverseSize);
   }
 
   public void insert(final int x) {
-    if (min == NullableInt.NULL) {
-      min = new NullableInt(x);
-      max = new NullableInt(x);
+    guard(x);
+    if (min == NULL) {
+      insertIntoEmptyTree(x);
+    } else {
+      insertIntoNonEmptyTree(x);
     }
   }
 
-  private static final class NullableInt {
-    private static final NullableInt NULL = new NullableInt();
-    private final int v;
-    private final boolean isNull;
+  public int successor(final int x) {
+    guard(x);
 
-    private NullableInt() {
-      this.isNull = true;
-      v = 0;
+  }
+
+  protected void insertIntoNonEmptyTree(int x) {
+    if (x != min) {
+      if (x < min) {
+        final int tmp = x;
+        x = min;
+        min = tmp;
+      }
+      final int clusterIndex = high(x);
+      insertIntoCluster(x, clusterIndex);
+      if (x > max) {
+        max = x;
+      }
+    }
+  }
+
+  protected void createSummaryIfNecessary() {
+    if (summary == null) {
+      summary = VanEmdeBoasTree.create(squareRootOfUniverseSize);
+    }
+  }
+
+  protected void createClusterAndSummaryIfNecessary(final int clusterIndex) {
+    if (clusters == null) {
+      clusters = new VanEmdeBoasTree[squareRootOfUniverseSize];
+    }
+    if (clusters[clusterIndex] == null) {
+      clusters[clusterIndex] = VanEmdeBoasTree.create(squareRootOfUniverseSize);
+      createSummaryIfNecessary();
+      summary.insert(clusterIndex);
+    }
+  }
+
+  private int high(final int x) {
+    return x >>> highShift;
+  }
+
+  private int low(final int x) {
+    return x & lowMask;
+  }
+
+  private void insertIntoEmptyTree(final int x) {
+    this.min = x;
+    this.max = x;
+  }
+
+  private void insertIntoCluster(final int x, final int clusterIndex) {
+    createClusterAndSummaryIfNecessary(clusterIndex);
+    final VanEmdeBoasTree cluster = clusters[clusterIndex];
+    final int clusterMin = cluster.min;
+    if (clusterMin == NULL) {
+      cluster.insertIntoEmptyTree(x);
+    } else {
+      cluster.insert(x);
+    }
+  }
+
+  private static void guard(final int x) {
+    if (x < 0) {
+      throw new IllegalArgumentException("Negative integers are not allowed");
+    } else if (x > MAX_UNIVERSE_SIZE) {
+      throw new IllegalArgumentException("Values larger than universe size are not allowed");
+    }
+  }
+
+  private static VanEmdeBoasTree create(final int size) {
+    if (size == MIN_UNIVERSE_SIZE) {
+      return new VanEmdeBoasTreeOfMinUniverseSize();
+    } else {
+      return new VanEmdeBoasTree(size);
+    }
+  }
+
+  private static class VanEmdeBoasTreeOfMinUniverseSize extends VanEmdeBoasTree {
+    VanEmdeBoasTreeOfMinUniverseSize() {
+      super(2);
     }
 
-    NullableInt(final int v) {
-      this.isNull = false;
-      this.v = v;
+    @Override public int successor(final int x) {
+      if (x < min) {
+        return min;
+      } else if (x > max) {
+        return NULL;
+      } else {
+        return max;
+      }
     }
 
-    @Override public boolean equals(final Object o) {
-      if (this == o) return true;
-      if (!(o instanceof NullableInt)) return false;
-
-      final NullableInt that = (NullableInt) o;
-
-      if (v != that.v) return false;
-      return isNull == that.isNull;
+    @Override protected void insertIntoNonEmptyTree(final int x) {
+      if (x < min) {
+        max = min;
+        min = x;
+      } else {
+        if (x != min) {
+          max = x;
+        }
+      }
     }
 
-    @Override public int hashCode() {
-      int result = v;
-      result = 31 * result + (isNull ? 1 : 0);
-      return result;
+    @Override protected void createSummaryIfNecessary() {
+      //do nothing
+    }
+
+    @Override protected void createClusterAndSummaryIfNecessary(final int clusterIndex) {
+      //do nothing
     }
   }
 }
