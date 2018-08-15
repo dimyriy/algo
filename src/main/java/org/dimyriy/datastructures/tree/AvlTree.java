@@ -6,15 +6,23 @@ import static java.lang.Math.max;
  * @author Dmitrii Bogdanov
  * Created at 24.07.18
  */
-public class AvlTree {
+public class AvlTree implements SuccessorAware, InsertionAware {
   private Node root;
 
-  AvlTree() {
+  public AvlTree() {
     this.root = null;
   }
 
   public Node getRoot() {
     return root;
+  }
+
+  @Override public int successor(final int x) {
+    return 0;
+  }
+
+  @Override public void insert(final int x) {
+    add(x);
   }
 
   void add(final int value) {

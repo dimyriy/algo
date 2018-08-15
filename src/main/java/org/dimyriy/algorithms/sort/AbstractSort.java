@@ -39,5 +39,10 @@ public abstract class AbstractSort<T extends Comparable<T>> implements Sort<T> {
     return true;
   }
 
+  @Override
+  public boolean isDuplicatesAllowed() {
+    return true;
+  }
+
   abstract void sortImpl(@Nonnull final T[] arr);
 }

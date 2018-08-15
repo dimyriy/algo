@@ -11,6 +11,11 @@ import javax.annotation.Nonnull;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class QuickSort<T extends Comparable<T>> extends AbstractSort<T> {
   @Override
+  public boolean isFast() {
+    return false;
+  }
+
+  @Override
   void sortImpl(@Nonnull final T[] arr) {
     quickSort(arr, 0, arr.length - 1);
   }

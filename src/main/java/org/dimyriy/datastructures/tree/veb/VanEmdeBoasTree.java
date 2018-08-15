@@ -10,7 +10,7 @@ import org.dimyriy.util.NumberUtil;
  * <p>
  * Created on 09.08.18
  */
-class VanEmdeBoasTree implements SuccessorAware, InsertionAware, DeletionAware {
+public class VanEmdeBoasTree implements SuccessorAware, InsertionAware, DeletionAware {
   static final int NULL = Integer.MIN_VALUE;
   private static final int MIN_UNIVERSE_SIZE = 1 << 1;
   private static final int MAX_UNIVERSE_SIZE = 1 << 30;
@@ -159,7 +159,7 @@ class VanEmdeBoasTree implements SuccessorAware, InsertionAware, DeletionAware {
     }
   }
 
-  static VanEmdeBoasTree create(final int size) {
+  public static VanEmdeBoasTree create(final int size) {
     if (size == MIN_UNIVERSE_SIZE) {
       return new VanEmdeBoasTreeOfMinUniverseSize();
     } else {

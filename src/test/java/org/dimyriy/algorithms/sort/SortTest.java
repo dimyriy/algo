@@ -24,21 +24,25 @@ import static org.hamcrest.collection.IsArrayContainingInAnyOrder.arrayContainin
  */
 class SortTest {
   private static final Random RANDOM = new Random();
-  private static final int RELATIVELY_LARGE_ARRAY_SIZE = 10000;
+  private static final int RELATIVELY_LARGE_ARRAY_SIZE = 100000;
   private static List<Class<? extends Sort>> allSortingAlgorithms;
-  private Integer[] sortedArray;
-  private Integer[] unSortedArray;
+  private Integer[] sortedArrayWithDuplicates;
+  private Integer[] unsortedArrayWithDuplicates;
+  private Integer[] sortedArrayWithoutDuplicates;
+  private Integer[] unsortedArrayWithoutDuplicates;
 
   @BeforeEach
   void setUp() {
-    sortedArray = new Integer[]{1, 2, 3, 3, 4, 5, 6, 10, 150, Integer.MAX_VALUE};
-    unSortedArray = new Integer[]{1, 2, 3, 4, 5, 6, 3, 149, 150, Integer.MAX_VALUE};
+    sortedArrayWithDuplicates = new Integer[]{1, 2, 3, 3, 4, 5, 6, 10, 150, Integer.MAX_VALUE};
+    sortedArrayWithoutDuplicates = new Integer[]{1, 2, 3, 4, 5, 6, 10, 8, 9};
+    unsortedArrayWithDuplicates = new Integer[]{1, 2, 3, 4, 5, 6, 3, 149, 150, Integer.MAX_VALUE};
+    unsortedArrayWithoutDuplicates = new Integer[]{1, 9, 6, 2, 4, 12, 8, 7, 14};
   }
 
   @ParameterizedTest
   @MethodSource("allSortingAlgorithms")
   void testIsSortedReturnsTrueForSortedArray(@Nonnull final Sort<Integer> algorithm) {
-    Assertions.assertTrue(algorithm.isSortedAsc(sortedArray),
+    Assertions.assertTrue(algorithm.isSortedAsc(sortedArrayWithDuplicates),
                           algoName(algorithm) + ".isSortedAsc returns true for sorted array");
   }
 
@@ -67,60 +71,41 @@ class SortTest {
   @ParameterizedTest
   @MethodSource("allSortingAlgorithms")
   void testIsSortedReturnsFalseForUnsortedArray(@Nonnull final Sort<Integer> algorithm) {
-    Assertions.assertFalse(algorithm.isSortedAsc(unSortedArray),
+    Assertions.assertFalse(algorithm.isSortedAsc(unsortedArrayWithDuplicates),
                            algoName(algorithm) + ".isSortedAsc returns false for unsorted array");
   }
 
   @ParameterizedTest
   @MethodSource("allSortingAlgorithms")
   void testSortLeavesUnsortedArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
-    final Integer[] initialArray = unSortedArray.clone();
-    algorithm.sort(unSortedArray);
-    Assert.assertThat(unSortedArray, arrayContainingInAnyOrder(initialArray));
-    Assertions.assertTrue(algorithm.isSortedAsc(unSortedArray),
-                          algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
+    final Integer[] problem = algorithm.isDuplicatesAllowed() ? unsortedArrayWithDuplicates : unsortedArrayWithoutDuplicates;
+    sortAndAssertSorted(algorithm, problem);
   }
 
   @ParameterizedTest
   @MethodSource("fastSortingAlgorithms")
   void testSortLeavesRelativelyLargeRandomlyGeneratedUnsortedArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
-    final Integer[] relativelyLargeRandomArray = new Integer[RELATIVELY_LARGE_ARRAY_SIZE];
-    for (int i = 0; i < relativelyLargeRandomArray.length; i++) {
-      relativelyLargeRandomArray[i] = RANDOM.nextInt(10000);
-    }
-    final Integer[] initialArray = relativelyLargeRandomArray.clone();
-    algorithm.sort(relativelyLargeRandomArray);
-    Assert.assertThat(relativelyLargeRandomArray, arrayContainingInAnyOrder(initialArray));
-    Assertions.assertTrue(algorithm.isSortedAsc(relativelyLargeRandomArray),
-                          algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
+    final Integer[] problem = algorithm.isDuplicatesAllowed() ? createRandomArrayOfSizeWithElementsSmallerOrEqualTo(RELATIVELY_LARGE_ARRAY_SIZE, 10000) :
+                              createRandomDistinctArrayOfSizeWithElementsSmallerOrEqualTo(RELATIVELY_LARGE_ARRAY_SIZE, RELATIVELY_LARGE_ARRAY_SIZE);
+    sortAndAssertSorted(algorithm, problem);
   }
 
   @ParameterizedTest
   @MethodSource("allSortingAlgorithms")
   void testSortLeavesSortedArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
-    final Integer[] initialArray = sortedArray.clone();
-    algorithm.sort(sortedArray);
-    Assert.assertThat(sortedArray, arrayContainingInAnyOrder(initialArray));
-    Assertions.assertTrue(algorithm.isSortedAsc(sortedArray),
-                          algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
+    sortAndAssertSorted(algorithm, algorithm.isDuplicatesAllowed() ? sortedArrayWithDuplicates : sortedArrayWithoutDuplicates);
   }
 
   @ParameterizedTest
   @MethodSource("allSortingAlgorithms")
   void testSortLeavesOneElementArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
-    final Integer[] arr = {1};
-    algorithm.sort(arr);
-    Assertions.assertTrue(algorithm.isSortedAsc(arr),
-                          algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
+    sortAndAssertSorted(algorithm, new Integer[]{1});
   }
 
   @ParameterizedTest
   @MethodSource("allSortingAlgorithms")
   void testSortLeavesEmptyArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
-    final Integer[] arr = {};
-    algorithm.sort(arr);
-    Assertions.assertTrue(algorithm.isSortedAsc(arr),
-                          algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
+    sortAndAssertSorted(algorithm, new Integer[]{});
   }
 
   @ParameterizedTest
@@ -129,6 +114,24 @@ class SortTest {
     Assertions.assertThrows(NullPointerException.class,
                             () -> algorithm.sort(null),
                             algoName(algorithm) + ".sort(null) throws NPE");
+  }
+
+  private void sortAndAssertSorted(@Nonnull final Sort<Integer> algorithm, final Integer[] problem) {
+    final Integer[] initialArray = problem.clone();
+    algorithm.sort(problem);
+    Assert.assertThat(problem, arrayContainingInAnyOrder(initialArray));
+    Assertions.assertTrue(algorithm.isSortedAsc(problem),
+                          algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
+  }
+
+  @SuppressWarnings("SameParameterValue")
+  private Integer[] createRandomArrayOfSizeWithElementsSmallerOrEqualTo(final int size, final int bound) {
+    return RANDOM.ints(1, bound).limit(size).boxed().toArray(Integer[]::new);
+  }
+
+  @SuppressWarnings("SameParameterValue")
+  private Integer[] createRandomDistinctArrayOfSizeWithElementsSmallerOrEqualTo(final int size, final int bound) {
+    return RANDOM.ints(1, bound).limit(size * 2).distinct().limit(size).boxed().toArray(Integer[]::new);
   }
 
   private String algoName(@Nonnull final Sort<Integer> algorithm) {

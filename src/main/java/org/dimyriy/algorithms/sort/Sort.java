@@ -13,4 +13,6 @@ public interface Sort<T extends Comparable<T>> {
   boolean isSortedAsc(@Nonnull T[] arr);
 
   boolean isFast();
+
+  boolean isDuplicatesAllowed();
 }

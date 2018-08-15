@@ -11,6 +11,11 @@ public class QuickPlusInsertionSort<T extends Comparable<T>> extends QuickSort<T
   private final InsertionSort<T> insertionSort = new InsertionSort<>();
 
   @Override
+  public boolean isFast() {
+    return true;
+  }
+
+  @Override
   void sortImpl(@Nonnull final T[] arr) {
     quickSort(arr, 0, arr.length - 1);
   }
