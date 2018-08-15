@@ -1,5 +1,6 @@
 package org.dimyriy.algorithms.sort;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,13 +16,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.hamcrest.collection.IsArrayContainingInAnyOrder.arrayContainingInAnyOrder;
+
 /**
  * @author Dmitrii Bogdanov
  * Created at 22.07.18
  */
 class SortTest {
   private static final Random RANDOM = new Random();
-  private static final int RELATIVELY_LARGE_ARRAY_SIZE = 1000000;
+  private static final int RELATIVELY_LARGE_ARRAY_SIZE = 10000;
   private static List<Class<? extends Sort>> allSortingAlgorithms;
   private Integer[] sortedArray;
   private Integer[] unSortedArray;
@@ -71,7 +74,9 @@ class SortTest {
   @ParameterizedTest
   @MethodSource("allSortingAlgorithms")
   void testSortLeavesUnsortedArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
+    final Integer[] initialArray = unSortedArray.clone();
     algorithm.sort(unSortedArray);
+    Assert.assertThat(unSortedArray, arrayContainingInAnyOrder(initialArray));
     Assertions.assertTrue(algorithm.isSortedAsc(unSortedArray),
                           algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
   }
@@ -83,7 +88,9 @@ class SortTest {
     for (int i = 0; i < relativelyLargeRandomArray.length; i++) {
       relativelyLargeRandomArray[i] = RANDOM.nextInt(10000);
     }
+    final Integer[] initialArray = relativelyLargeRandomArray.clone();
     algorithm.sort(relativelyLargeRandomArray);
+    Assert.assertThat(relativelyLargeRandomArray, arrayContainingInAnyOrder(initialArray));
     Assertions.assertTrue(algorithm.isSortedAsc(relativelyLargeRandomArray),
                           algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
   }
@@ -91,7 +98,9 @@ class SortTest {
   @ParameterizedTest
   @MethodSource("allSortingAlgorithms")
   void testSortLeavesSortedArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
+    final Integer[] initialArray = sortedArray.clone();
     algorithm.sort(sortedArray);
+    Assert.assertThat(sortedArray, arrayContainingInAnyOrder(initialArray));
     Assertions.assertTrue(algorithm.isSortedAsc(sortedArray),
                           algoName(algorithm) + ".sort(arr) leaves an array in sorted state");
   }
