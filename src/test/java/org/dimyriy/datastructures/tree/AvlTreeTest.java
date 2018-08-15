@@ -35,12 +35,6 @@ class AvlTreeTest {
   }
 
   @Test
-  void testSuccessorOfMinIsNextLargestElement() {
-    final AvlTree tree = buildRandomTree();
-    Assertions.assertEquals(nextMin, tree.findMinimum().successor().getKey());
-  }
-
-  @Test
   void testBuildTreeIsBalanced() {
     final AvlTree tree = buildRandomTree();
     Assertions.assertTrue(tree.isBalanced());
