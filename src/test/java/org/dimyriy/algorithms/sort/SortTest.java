@@ -24,7 +24,7 @@ import static org.hamcrest.collection.IsArrayContainingInAnyOrder.arrayContainin
  */
 class SortTest {
   private static final Random RANDOM = new Random();
-  private static final int RELATIVELY_LARGE_ARRAY_SIZE = 100000;
+  private static final int RELATIVELY_LARGE_ARRAY_SIZE = 10000;
   private static List<Class<? extends Sort>> allSortingAlgorithms;
   private Integer[] sortedArrayWithDuplicates;
   private Integer[] unsortedArrayWithDuplicates;
@@ -78,16 +78,14 @@ class SortTest {
   @ParameterizedTest
   @MethodSource("allSortingAlgorithms")
   void testSortLeavesUnsortedArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
-    final Integer[] problem = algorithm.isDuplicatesAllowed() ? unsortedArrayWithDuplicates : unsortedArrayWithoutDuplicates;
-    sortAndAssertSorted(algorithm, problem);
+    sortAndAssertSorted(algorithm, algorithm.isDuplicatesAllowed() ? unsortedArrayWithDuplicates : unsortedArrayWithoutDuplicates);
   }
 
   @ParameterizedTest
   @MethodSource("fastSortingAlgorithms")
   void testSortLeavesRelativelyLargeRandomlyGeneratedUnsortedArrayInSortedState(@Nonnull final Sort<Integer> algorithm) {
-    final Integer[] problem = algorithm.isDuplicatesAllowed() ? createRandomArrayOfSizeWithElementsSmallerOrEqualTo(RELATIVELY_LARGE_ARRAY_SIZE, 10000) :
-                              createRandomDistinctArrayOfSizeWithElementsSmallerOrEqualTo(RELATIVELY_LARGE_ARRAY_SIZE, RELATIVELY_LARGE_ARRAY_SIZE);
-    sortAndAssertSorted(algorithm, problem);
+    sortAndAssertSorted(algorithm, algorithm.isDuplicatesAllowed() ? createRandomArrayOfSizeWithElementsSmallerOrEqualTo(RELATIVELY_LARGE_ARRAY_SIZE, 10000) :
+                                   createRandomDistinctArrayOfSizeWithElementsSmallerOrEqualTo(RELATIVELY_LARGE_ARRAY_SIZE, RELATIVELY_LARGE_ARRAY_SIZE));
   }
 
   @ParameterizedTest

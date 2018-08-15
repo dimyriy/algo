@@ -6,7 +6,7 @@ import static java.lang.Math.max;
  * @author Dmitrii Bogdanov
  * Created at 24.07.18
  */
-public class AvlTree implements SuccessorAware, InsertionAware {
+public class AvlTree implements SuccessorAware<AvlTree.Node, AvlTree.Node>, InsertionAware {
   private Node root;
 
   public AvlTree() {
@@ -17,19 +17,25 @@ public class AvlTree implements SuccessorAware, InsertionAware {
     return root;
   }
 
-  @Override public int successor(final int x) {
-    return 0;
+  public Node findMinimum() {
+    return root.findMinimum();
   }
 
-  @Override public void insert(final int x) {
-    add(x);
-  }
-
-  void add(final int value) {
-    if (root == null) {
-      this.root = new Node(value);
+  @Override
+  public Node successor(final Node x) {
+    if (root == null || x == null) {
+      return null;
     } else {
-      this.root = insert(root, value);
+      return x.successor();
+    }
+  }
+
+  @Override
+  public void insert(final int x) {
+    if (root == null) {
+      this.root = new Node(x);
+    } else {
+      this.root = insert(root, x);
     }
   }
 
@@ -62,9 +68,17 @@ public class AvlTree implements SuccessorAware, InsertionAware {
       return new Node(key);
     }
     if (key < node.key) {
+      final boolean setParent = node.left == null;
       node.left = insert(node.left, key);
+      if (setParent) {
+        node.left.parent = node;
+      }
     } else if (key > node.key) {
+      final boolean setParent = node.right == null;
       node.right = insert(node.right, key);
+      if (setParent) {
+        node.right.parent = node;
+      }
     } else {
       return node;
     }
@@ -73,41 +87,57 @@ public class AvlTree implements SuccessorAware, InsertionAware {
 
     final int balance = balance(node);
     if (isLeftHeavy(balance) && key < node.left.key) {
-      return rightRotate(node);
+      return rotateClockwise(node);
     }
 
     if (isRightHeavy(balance) && key > node.right.key) {
-      return leftRotate(node);
+      return rotateCounterClockwise(node);
     }
 
     if (isLeftHeavy(balance) && key > node.left.key) {
-      node.left = leftRotate(node.left);
-      return rightRotate(node);
+      node.left = rotateCounterClockwise(node.left);
+      return rotateClockwise(node);
     }
 
     if (isRightHeavy(balance) && key < node.right.key) {
-      node.right = rightRotate(node.right);
-      return leftRotate(node);
+      node.right = rotateClockwise(node.right);
+      return rotateCounterClockwise(node);
     }
 
     return node;
   }
 
-  private Node rightRotate(final Node node) {
+  private Node rotateClockwise(final Node node) {
     final Node newParent = node.left;
+    newParent.parent = node.parent;
     final Node tmp = newParent.right;
     newParent.right = node;
+    newParent.right.parent = newParent;
     node.left = tmp;
+    if (node.left != null) {
+      node.left.parent = node;
+    }
+    if (node.right != null) {
+      node.right.parent = node;
+    }
     node.height = max(height(node.left), height(node.right)) + 1;
     newParent.height = max(height(newParent.left), height(newParent.right)) + 1;
     return newParent;
   }
 
-  private Node leftRotate(final Node node) {
+  private Node rotateCounterClockwise(final Node node) {
     final Node newParent = node.right;
+    newParent.parent = node.parent;
     final Node tmp = newParent.left;
     newParent.left = node;
+    newParent.left.parent = newParent;
     node.right = tmp;
+    if (node.right != null) {
+      node.right.parent = node;
+    }
+    if (node.left != null) {
+      node.left.parent = node;
+    }
     node.height = max(height(node.left), height(node.right)) + 1;
     newParent.height = max(height(newParent.left), height(newParent.right)) + 1;
     return newParent;
@@ -130,6 +160,7 @@ public class AvlTree implements SuccessorAware, InsertionAware {
     private int height;
     private Node left;
     private Node right;
+    private Node parent = null;
 
     Node(final int key) {
       this.key = key;
@@ -148,6 +179,28 @@ public class AvlTree implements SuccessorAware, InsertionAware {
 
     public Node getRight() {
       return right;
+    }
+
+    Node findMinimum() {
+      if (left == null) {
+        return this;
+      } else {
+        return left.findMinimum();
+      }
+    }
+
+    Node successor() {
+      if (right != null) {
+        return right.findMinimum();
+      } else {
+        Node currentParent = this.parent;
+        Node current = this;
+        while (currentParent != null && current == currentParent.right) {
+          current = currentParent;
+          currentParent = current.parent;
+        }
+        return currentParent;
+      }
     }
 
     boolean isBst() {

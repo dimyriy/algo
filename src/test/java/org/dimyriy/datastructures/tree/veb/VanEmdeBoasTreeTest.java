@@ -91,7 +91,7 @@ class VanEmdeBoasTreeTest {
   void successorOfTreeContainingOneElementCalledWithXSmallerThanExistingElementReturnsElement() {
     final VanEmdeBoasTree tree = VanEmdeBoasTree.create(4);
     tree.insert(3);
-    assertEquals(3, tree.successor(2));
+    assertEquals(new Integer(3), tree.successor(2));
   }
 
   @Test
@@ -99,7 +99,7 @@ class VanEmdeBoasTreeTest {
     final VanEmdeBoasTree tree = VanEmdeBoasTree.create(16);
     tree.insert(3);
     tree.insert(14);
-    assertEquals(14, tree.successor(5));
+    assertEquals(new Integer(14), tree.successor(5));
   }
 
   @Test
@@ -109,14 +109,14 @@ class VanEmdeBoasTreeTest {
     tree.insert(14);
     tree.delete(14);
     assertEquals(NULL, tree.successor(5));
-    assertEquals(3, tree.successor(NULL));
+    assertEquals(new Integer(3), tree.successor(NULL));
   }
 
   @Test
   void successorOfElementInTreeContainingOneElementsInNonFirstClustersReturnsCorrectElement() {
     final VanEmdeBoasTree tree = VanEmdeBoasTree.create(16);
     tree.insert(14);
-    assertEquals(14, tree.successor(3));
+    assertEquals(new Integer(14), tree.successor(3));
   }
 
   @Test
@@ -124,7 +124,7 @@ class VanEmdeBoasTreeTest {
     final VanEmdeBoasTree tree = VanEmdeBoasTree.create(16);
     tree.insert(3);
     tree.insert(14);
-    assertEquals(3, tree.successor(NULL));
+    assertEquals(new Integer(3), tree.successor(NULL));
   }
 
   @Test

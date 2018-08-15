@@ -11,7 +11,7 @@ import java.util.function.Function;
  * Created at 15.08.18
  */
 @SuppressWarnings("unused")
-abstract class SuccessorSort<T extends InsertionAware & SuccessorAware> extends AbstractSort<Integer> {
+abstract class SuccessorSort<K, R, T extends InsertionAware & SuccessorAware<K, R>> extends AbstractSort<Integer> {
   private final Function<Integer, T> successorAwareStructureCreator;
 
   SuccessorSort(@Nonnull final Function<Integer, T> successorAndInsertionAwareStructureCreatorByProblemSize) {
@@ -23,14 +23,11 @@ abstract class SuccessorSort<T extends InsertionAware & SuccessorAware> extends 
     return false;
   }
 
-  @Override void sortImpl(@Nonnull final Integer[] arr) {
+  T createDataStructureAndInsertAllElements(@Nonnull final Integer[] arr) {
     final T successorAndInsertionAwareStructure = successorAwareStructureCreator.apply(arr.length);
-    for (int i = 0; i < arr.length; i++) {
-      successorAndInsertionAwareStructure.insert(arr[i]);
+    for (final Integer anArr : arr) {
+      successorAndInsertionAwareStructure.insert(anArr);
     }
-    arr[0] = successorAndInsertionAwareStructure.successor(Integer.MIN_VALUE);
-    for (int i = 1; i < arr.length; i++) {
-      arr[i] = successorAndInsertionAwareStructure.successor(arr[i - 1]);
-    }
+    return successorAndInsertionAwareStructure;
   }
 }

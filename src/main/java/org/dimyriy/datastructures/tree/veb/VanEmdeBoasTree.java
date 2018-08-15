@@ -10,8 +10,8 @@ import org.dimyriy.util.NumberUtil;
  * <p>
  * Created on 09.08.18
  */
-public class VanEmdeBoasTree implements SuccessorAware, InsertionAware, DeletionAware {
-  static final int NULL = Integer.MIN_VALUE;
+public class VanEmdeBoasTree implements SuccessorAware<Integer, Integer>, InsertionAware, DeletionAware {
+  static final Integer NULL = Integer.MIN_VALUE;
   private static final int MIN_UNIVERSE_SIZE = 1 << 1;
   private static final int MAX_UNIVERSE_SIZE = 1 << 30;
   private final int lowMask;
@@ -50,7 +50,7 @@ public class VanEmdeBoasTree implements SuccessorAware, InsertionAware, Deletion
   }
 
   @Override
-  public int successor(final int x) {
+  public Integer successor(final Integer x) {
     if (min != NULL && x < min) {
       return min;
     } else {
@@ -180,7 +180,7 @@ public class VanEmdeBoasTree implements SuccessorAware, InsertionAware, Deletion
       super(2);
     }
 
-    @Override public int successor(final int x) {
+    @Override public Integer successor(final Integer x) {
       if (x < min) {
         return min;
       } else if (x < max) {

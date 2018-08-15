@@ -1,6 +1,7 @@
 package org.dimyriy.datastructures.tree;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
@@ -12,15 +13,35 @@ import java.util.Random;
 class AvlTreeTest {
   private static final int PROBLEM_SIZE = 100;
   private static final Random RANDOM = new Random();
+  private int min;
+  private int nextMin;
+
+  @BeforeEach
+  void setUp() {
+    min = Integer.MAX_VALUE;
+    nextMin = Integer.MAX_VALUE;
+  }
 
   @Test
-  void checkBuiltTreeIsBst() {
+  void testBuiltTreeIsBst() {
     final AvlTree tree = buildRandomTree();
     Assertions.assertTrue(tree.isBst());
   }
 
   @Test
-  void checkTreeIsBalanced() {
+  void testBuiltTreeMinimumIsCorrect() {
+    final AvlTree tree = buildRandomTree();
+    Assertions.assertEquals(min, tree.findMinimum().getKey());
+  }
+
+  @Test
+  void testSuccessorOfMinIsNextLargestElement() {
+    final AvlTree tree = buildRandomTree();
+    Assertions.assertEquals(nextMin, tree.findMinimum().successor().getKey());
+  }
+
+  @Test
+  void testBuildTreeIsBalanced() {
     final AvlTree tree = buildRandomTree();
     Assertions.assertTrue(tree.isBalanced());
   }
@@ -28,7 +49,12 @@ class AvlTreeTest {
   private AvlTree buildRandomTree() {
     final AvlTree tree = new AvlTree();
     for (int i = 0; i < PROBLEM_SIZE; i++) {
-      tree.add(RANDOM.nextInt(PROBLEM_SIZE / 2));
+      final int value = RANDOM.nextInt(PROBLEM_SIZE / 2);
+      if (value < min) {
+        nextMin = min;
+        min = value;
+      }
+      tree.insert(value);
     }
     return tree;
   }
