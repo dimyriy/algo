@@ -6,9 +6,9 @@ import java.util.List;
 
 /**
  * @author Dmitrii Bogdanov
- *
+ * <p>
  * Created on 16.08.18
- *
+ * <p>
  * Copyright (c) 2018, Check24 Vergleichsportal GmbH
  */
 public interface GraphTraverser<T> {

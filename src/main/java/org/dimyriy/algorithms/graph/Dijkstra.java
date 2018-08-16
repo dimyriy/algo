@@ -21,11 +21,11 @@ class Dijkstra<T> implements GraphPathFinder<T> {
   }
 
   @Override
-  public List<AdjGraph.Vertex<T>> findPath(AdjGraph.Vertex<T> s, AdjGraph.Vertex<T> to) {
+  public List<AdjGraph.Vertex<T>> findPath(final AdjGraph.Vertex<T> s, final AdjGraph.Vertex<T> to) {
     return findShortestPath(s, to);
   }
 
-  List<AdjGraph.Vertex<T>> findShortestPath(@Nonnull final AdjGraph.Vertex<T> source, @Nonnull final AdjGraph.Vertex<T> target) {
+  private List<AdjGraph.Vertex<T>> findShortestPath(@Nonnull final AdjGraph.Vertex<T> source, @Nonnull final AdjGraph.Vertex<T> target) {
     guard(source, target);
     if (source.equals(target)) {
       return Collections.singletonList(source);

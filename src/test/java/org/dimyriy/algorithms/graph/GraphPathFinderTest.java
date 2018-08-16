@@ -3,7 +3,9 @@ package org.dimyriy.algorithms.graph;
 import org.dimyriy.datastructures.LabeledPoint2d;
 import org.dimyriy.datastructures.graph.AdjGraph;
 import org.junit.Assert;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
@@ -41,35 +43,10 @@ class GraphPathFinderTest {
     Assert.assertEquals(expectedPath(), new BFS<>(graph).traverse(new AdjGraph.Vertex<>(2)));
   }
 
-  private void createEdge(final int v1, final int v2, final AdjGraph<Integer> graph, final int weight) {
-    final AdjGraph.Vertex<Integer> vertex1 = verticesCache.computeIfAbsent(v1, integer -> new AdjGraph.Vertex<>(v1));
-    final AdjGraph.Vertex<Integer> vertex2 = verticesCache.computeIfAbsent(v2, integer -> new AdjGraph.Vertex<>(v2));
-    graph.addNeighbor(vertex1, vertex2, weight);
-  }
-
   @Test
   void depthFirstSearchTraverseFindsCorrectPaths() {
     final AdjGraph<Integer> graph = createGraph();
     Assert.assertEquals(expectedPath(), new DFS<>(graph).traverse(new AdjGraph.Vertex<>(2)));
-  }
-
-  private AdjGraph<Integer> createGraph() {
-    final AdjGraph<Integer> graph = new AdjGraph<>();
-    createEdge(0, 1, graph, 1);
-    createEdge(0, 2, graph, 1);
-    createEdge(1, 2, graph, 1);
-    createEdge(2, 0, graph, 1);
-    createEdge(2, 3, graph, 1);
-    return graph;
-  }
-
-  private List<AdjGraph.Vertex<Integer>> expectedPath() {
-    final List<AdjGraph.Vertex<Integer>> expectedPath = new LinkedList<>();
-    expectedPath.add(new AdjGraph.Vertex<>(2));
-    expectedPath.add(new AdjGraph.Vertex<>(0));
-    expectedPath.add(new AdjGraph.Vertex<>(1));
-    expectedPath.add(new AdjGraph.Vertex<>(3));
-    return expectedPath;
   }
 
   AdjGraph<Integer> createSimpleGraph() {
@@ -86,22 +63,9 @@ class GraphPathFinderTest {
     return graph;
   }
 
-  private List<AdjGraph.Vertex<Integer>> expectedShortestPath() {
-    final List<AdjGraph.Vertex<Integer>> pathToVertex = new LinkedList<>();
-    pathToVertex.add(new AdjGraph.Vertex<>(1));
-    pathToVertex.add(new AdjGraph.Vertex<>(2));
-    pathToVertex.add(new AdjGraph.Vertex<>(5));
-    pathToVertex.add(new AdjGraph.Vertex<>(6));
-    return pathToVertex;
-  }
-
-  void assertSimpleShortestPathIsCorrect(GraphPathFinder<Integer> algorithm) {
+  void assertSimpleShortestPathIsCorrect(final GraphPathFinder<Integer> algorithm) {
     final List<AdjGraph.Vertex<Integer>> calculatedShortestPath = algorithm.findPath(new AdjGraph.Vertex<>(1), new AdjGraph.Vertex<>(6));
     Assertions.assertEquals(expectedShortestPath(), calculatedShortestPath);
-  }
-
-  private LabeledPoint2d getPointFromCache(final String label) {
-    return points.get(label);
   }
 
   AdjGraph<LabeledPoint2d> createGeometricalGraph() {
@@ -153,6 +117,50 @@ class GraphPathFinderTest {
     return graph;
   }
 
+  void assertShortestPathInGeoGraph(final GraphPathFinder<LabeledPoint2d> algorithm) {
+    final List<AdjGraph.Vertex<LabeledPoint2d>> path = algorithm.findPath(new AdjGraph.Vertex<>(getPointFromCache("Q")),
+                                                                          new AdjGraph.Vertex<>(getPointFromCache("A")));
+    Assertions.assertEquals(getExpectedShortestPathInGeometricalGraph(), path);
+  }
+
+  private void createEdge(final int v1, final int v2, final AdjGraph<Integer> graph, final int weight) {
+    final AdjGraph.Vertex<Integer> vertex1 = verticesCache.computeIfAbsent(v1, integer -> new AdjGraph.Vertex<>(v1));
+    final AdjGraph.Vertex<Integer> vertex2 = verticesCache.computeIfAbsent(v2, integer -> new AdjGraph.Vertex<>(v2));
+    graph.addNeighbor(vertex1, vertex2, weight);
+  }
+
+  private AdjGraph<Integer> createGraph() {
+    final AdjGraph<Integer> graph = new AdjGraph<>();
+    createEdge(0, 1, graph, 1);
+    createEdge(0, 2, graph, 1);
+    createEdge(1, 2, graph, 1);
+    createEdge(2, 0, graph, 1);
+    createEdge(2, 3, graph, 1);
+    return graph;
+  }
+
+  private List<AdjGraph.Vertex<Integer>> expectedPath() {
+    final List<AdjGraph.Vertex<Integer>> expectedPath = new LinkedList<>();
+    expectedPath.add(new AdjGraph.Vertex<>(2));
+    expectedPath.add(new AdjGraph.Vertex<>(0));
+    expectedPath.add(new AdjGraph.Vertex<>(1));
+    expectedPath.add(new AdjGraph.Vertex<>(3));
+    return expectedPath;
+  }
+
+  private List<AdjGraph.Vertex<Integer>> expectedShortestPath() {
+    final List<AdjGraph.Vertex<Integer>> pathToVertex = new LinkedList<>();
+    pathToVertex.add(new AdjGraph.Vertex<>(1));
+    pathToVertex.add(new AdjGraph.Vertex<>(2));
+    pathToVertex.add(new AdjGraph.Vertex<>(5));
+    pathToVertex.add(new AdjGraph.Vertex<>(6));
+    return pathToVertex;
+  }
+
+  private LabeledPoint2d getPointFromCache(final String label) {
+    return points.get(label);
+  }
+
   private List<AdjGraph.Vertex<LabeledPoint2d>> getExpectedShortestPathInGeometricalGraph() {
     return Arrays.asList(
         new AdjGraph.Vertex<>(getPointFromCache("Q")),
@@ -169,10 +177,5 @@ class GraphPathFinderTest {
 
   private void addEdge(final AdjGraph<LabeledPoint2d> graph, final LabeledPoint2d point1, final LabeledPoint2d point2) {
     graph.addNeighbor(new AdjGraph.Vertex<>(point1), new AdjGraph.Vertex<>(point2), (int) Math.ceil(point1.distance(point2)));
-  }
-
-  void assertShortestPathInGeoGraph(GraphPathFinder<LabeledPoint2d> algorithm) {
-    List<AdjGraph.Vertex<LabeledPoint2d>> path = algorithm.findPath(new AdjGraph.Vertex<>(getPointFromCache("Q")), new AdjGraph.Vertex<>(getPointFromCache("A")));
-    Assertions.assertEquals(getExpectedShortestPathInGeometricalGraph(), path);
   }
 }
