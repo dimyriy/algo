@@ -11,7 +11,7 @@ import java.util.List;
  * Created at 29.07.18
  */
 @NotThreadSafe
-public class DFS<T> implements PathSearch<T> {
+public class DFS<T> implements GraphPathFinder<T>, GraphTraverser<T> {
   private final List<AdjGraph.Vertex<T>> visited = new LinkedList<>();
   private final AdjGraph<T> graph;
 
@@ -20,7 +20,7 @@ public class DFS<T> implements PathSearch<T> {
   }
 
   @Override
-  public List<AdjGraph.Vertex<T>> searchPath(final AdjGraph.Vertex<T> s, final AdjGraph.Vertex<T> to) {
+  public List<AdjGraph.Vertex<T>> findPath(final AdjGraph.Vertex<T> s, final AdjGraph.Vertex<T> to) {
     visited.add(s);
     return null;
   }

@@ -5,16 +5,14 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Dmitrii Bogdanov
  * Created at 29.07.18
  */
-class PathSearchTest {
+class GraphPathFinderTest {
   private final Map<Integer, AdjGraph.Vertex<Integer>> verticesCache = new ConcurrentHashMap<>();
 
   @Test
@@ -37,7 +35,7 @@ class PathSearchTest {
     Assert.assertEquals(expectedPath(), new BFS<>(graph).traverse(new AdjGraph.Vertex<>(2)));
   }
 
-  void createEdge(final int v1, final int v2, final AdjGraph<Integer> graph, final int weight) {
+  private void createEdge(final int v1, final int v2, final AdjGraph<Integer> graph, final int weight) {
     final AdjGraph.Vertex<Integer> vertex1 = verticesCache.computeIfAbsent(v1, integer -> new AdjGraph.Vertex<>(v1));
     final AdjGraph.Vertex<Integer> vertex2 = verticesCache.computeIfAbsent(v2, integer -> new AdjGraph.Vertex<>(v2));
     graph.addNeighbor(vertex1, vertex2, weight);
@@ -68,4 +66,31 @@ class PathSearchTest {
     return expectedPath;
   }
 
+  AdjGraph<Integer> createSimpleGraph() {
+    final AdjGraph<Integer> graph = new AdjGraph<>();
+    createEdge(1, 2, graph, 2);
+    createEdge(1, 3, graph, 4);
+    createEdge(2, 4, graph, 4);
+    createEdge(2, 3, graph, 1);
+    createEdge(2, 5, graph, 2);
+    createEdge(3, 5, graph, 3);
+    createEdge(4, 5, graph, 3);
+    createEdge(4, 6, graph, 2);
+    createEdge(5, 6, graph, 2);
+    return graph;
+  }
+
+  List<AdjGraph.Vertex<Integer>> expectedShortestPath() {
+    final List<AdjGraph.Vertex<Integer>> pathToVertex = new LinkedList<>();
+    pathToVertex.add(new AdjGraph.Vertex<>(1));
+    pathToVertex.add(new AdjGraph.Vertex<>(2));
+    pathToVertex.add(new AdjGraph.Vertex<>(5));
+    pathToVertex.add(new AdjGraph.Vertex<>(6));
+    return pathToVertex;
+  }
+
+  void assertSimpleShortestPathIsCorrect(GraphPathFinder<Integer> algorithm) {
+    final List<AdjGraph.Vertex<Integer>> calculatedShortestPath = algorithm.findPath(new AdjGraph.Vertex<>(1), new AdjGraph.Vertex<>(6));
+    Assertions.assertEquals(expectedShortestPath(), calculatedShortestPath);
+  }
 }

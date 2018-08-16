@@ -6,10 +6,11 @@ import java.util.List;
 
 /**
  * @author Dmitrii Bogdanov
- * Created at 29.07.18
+ *
+ * Created on 16.08.18
+ *
+ * Copyright (c) 2018, Check24 Vergleichsportal GmbH
  */
-public interface PathSearch<T> {
-  List<AdjGraph.Vertex<T>> searchPath(final AdjGraph.Vertex<T> s, final AdjGraph.Vertex<T> to);
-
+public interface GraphTraverser<T> {
   List<AdjGraph.Vertex<T>> traverse(final AdjGraph.Vertex<T> s);
 }

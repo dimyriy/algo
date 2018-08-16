@@ -11,13 +11,18 @@ import java.util.*;
  * Created at 29.07.18
  */
 @NotThreadSafe
-class Dijkstra<T> {
+class Dijkstra<T> implements GraphPathFinder<T> {
   private final PriorityQueue<Node<AdjGraph.Vertex<T>>> shortestNodesQueue = new PriorityQueue<>();
   private final AdjGraph<T> graph;
   private final Map<AdjGraph.Vertex<T>, Node<AdjGraph.Vertex<T>>> allNodes = new HashMap<>();
 
   Dijkstra(@Nonnull final AdjGraph<T> graph) {
     this.graph = graph;
+  }
+
+  @Override
+  public List<AdjGraph.Vertex<T>> findPath(AdjGraph.Vertex<T> s, AdjGraph.Vertex<T> to) {
+    return findShortestPath(s, to);
   }
 
   List<AdjGraph.Vertex<T>> findShortestPath(@Nonnull final AdjGraph.Vertex<T> source, @Nonnull final AdjGraph.Vertex<T> target) {

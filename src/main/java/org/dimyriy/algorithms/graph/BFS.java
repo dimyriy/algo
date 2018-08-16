@@ -8,7 +8,7 @@ import java.util.*;
  * @author Dmitrii Bogdanov
  * Created at 29.07.18
  */
-class BFS<T> implements PathSearch<T> {
+class BFS<T> implements GraphPathFinder<T>, GraphTraverser<T> {
   private final AdjGraph<T> graph;
 
   BFS(final AdjGraph<T> graph) {
@@ -16,7 +16,7 @@ class BFS<T> implements PathSearch<T> {
   }
 
   @Override
-  public List<AdjGraph.Vertex<T>> searchPath(final AdjGraph.Vertex<T> s, final AdjGraph.Vertex<T> to) {
+  public List<AdjGraph.Vertex<T>> findPath(final AdjGraph.Vertex<T> s, final AdjGraph.Vertex<T> to) {
     final List<AdjGraph.Vertex<T>> visited = new LinkedList<>();
     final Queue<AdjGraph.Vertex<T>> queue = new ArrayDeque<>();
     visited.add(s);
