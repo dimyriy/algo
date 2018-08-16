@@ -80,7 +80,7 @@ class GraphPathFinderTest {
     return graph;
   }
 
-  List<AdjGraph.Vertex<Integer>> expectedShortestPath() {
+  private List<AdjGraph.Vertex<Integer>> expectedShortestPath() {
     final List<AdjGraph.Vertex<Integer>> pathToVertex = new LinkedList<>();
     pathToVertex.add(new AdjGraph.Vertex<>(1));
     pathToVertex.add(new AdjGraph.Vertex<>(2));
