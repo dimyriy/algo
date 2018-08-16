@@ -1,6 +1,8 @@
 package org.dimyriy.algorithms.graph;
 
-import org.junit.jupiter.api.*;
+import org.dimyriy.datastructures.LabeledPoint2d;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Dmitrii Bogdanov
@@ -12,12 +14,19 @@ class DijkstraTest {
   @BeforeEach
   void setUp() {
     pathFinderTest = new GraphPathFinderTest();
+    pathFinderTest.setUp();
   }
 
   @Test
-  void findShortestPath() {
-    final Dijkstra<Integer> algorithm = new Dijkstra<>(pathFinderTest.createSimpleGraph());
-    pathFinderTest.assertSimpleShortestPathIsCorrect(algorithm);
+  void testFindShortestPathReturnsCorrectPath() {
+    pathFinderTest.assertSimpleShortestPathIsCorrect(new Dijkstra<>(pathFinderTest.createSimpleGraph()));
+  }
+
+
+  @Test
+  void testFindShortestPathInGeometricalGraphReturnsCorrectPath() {
+    final GraphPathFinder<LabeledPoint2d> algorithm = new Dijkstra<>(pathFinderTest.createGeometricalGraph());
+    pathFinderTest.assertShortestPathInGeoGraph(algorithm);
   }
 
 }
