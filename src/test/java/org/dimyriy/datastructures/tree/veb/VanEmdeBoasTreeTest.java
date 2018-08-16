@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Created at 10.08.18
  */
 class VanEmdeBoasTreeTest {
+  private static final boolean isLogEnabled = false;
   private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
   private static final Random RANDOM = new Random();
   private static final int smallProblemSize = 1 << 3;
@@ -168,7 +169,9 @@ class VanEmdeBoasTreeTest {
   }
 
   private void log(final String s) {
-    System.out.println("[" + SIMPLE_DATE_FORMAT.format(new Date()) + "] -> " + s);
+    if (isLogEnabled) {
+      System.out.println("[" + SIMPLE_DATE_FORMAT.format(new Date()) + "] -> " + s);
+    }
   }
 
   @SuppressWarnings("PackageVisibleField")
