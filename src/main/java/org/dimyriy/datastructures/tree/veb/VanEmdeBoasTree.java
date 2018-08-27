@@ -99,7 +99,7 @@ public class VanEmdeBoasTree implements SuccessorAware<Integer, Integer>, Insert
     }
   }
 
-  protected void insertIntoNonEmptyTree(int x) {
+  void insertIntoNonEmptyTree(int x) {
     if (x != min && x != max) {
       if (x < min) {
         final int tmp = x;
@@ -114,13 +114,13 @@ public class VanEmdeBoasTree implements SuccessorAware<Integer, Integer>, Insert
     }
   }
 
-  protected void createSummaryIfNecessary() {
+  void createSummaryIfNecessary() {
     if (summary == null) {
       summary = VanEmdeBoasTree.create(squareRootOfUniverseSize);
     }
   }
 
-  protected void createClusterAndSummaryIfNecessary(final int clusterIndex) {
+  void createClusterAndSummaryIfNecessary(final int clusterIndex) {
     if (clusters == null) {
       clusters = new VanEmdeBoasTree[squareRootOfUniverseSize];
     }

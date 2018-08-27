@@ -11,13 +11,12 @@ import java.util.*;
  * Created at 29.07.18
  */
 @NotThreadSafe
-class Dijkstra<T> implements GraphPathFinder<T> {
+class Dijkstra<T> extends ShortestPathFinder<T> {
   private final PriorityQueue<Node<AdjGraph.Vertex<T>>> shortestNodesQueue = new PriorityQueue<>();
-  private final AdjGraph<T> graph;
   private final Map<AdjGraph.Vertex<T>, Node<AdjGraph.Vertex<T>>> allNodes = new HashMap<>();
 
   Dijkstra(@Nonnull final AdjGraph<T> graph) {
-    this.graph = graph;
+    super(graph);
   }
 
   @Override
@@ -36,12 +35,6 @@ class Dijkstra<T> implements GraphPathFinder<T> {
       return null;
     } else {
       return findPathToNode(targetNode);
-    }
-  }
-
-  private void guard(@Nonnull final AdjGraph.Vertex<T> source, @Nonnull final AdjGraph.Vertex<T> target) {
-    if (graph.getNeighborsWithWeights(source).isEmpty() || graph.getNeighborsWithWeights(target).isEmpty()) {
-      throw new IllegalStateException("Graph is malformed");
     }
   }
 
@@ -103,14 +96,18 @@ class Dijkstra<T> implements GraphPathFinder<T> {
     shortestNodesQueue.add(node);
   }
 
-  private static class Node<T> implements Comparable<Node<T>> {
+  static class Node<T> implements Comparable<Node<T>> {
     private final T vertex;
     private int cost = Integer.MAX_VALUE;
     private Node<T> predecessor;
     private boolean visited = false;
 
-    private Node(final T vertex) {
+    Node(final T vertex) {
       this.vertex = vertex;
+    }
+
+    Node<T> getPredecessor() {
+      return predecessor;
     }
 
     @Override
@@ -131,6 +128,10 @@ class Dijkstra<T> implements GraphPathFinder<T> {
       final Node<?> node = (Node<?>) o;
 
       return vertex.equals(node.vertex);
+    }
+
+    T getVertex() {
+      return vertex;
     }
   }
 }

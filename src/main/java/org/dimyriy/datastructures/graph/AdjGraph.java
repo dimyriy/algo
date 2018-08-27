@@ -40,6 +40,10 @@ public class AdjGraph<T> {
   public static class Vertex<T> {
     private final T value;
 
+    public T getValue() {
+      return value;
+    }
+
     public Vertex(final T value) {
       this.value = value;
     }

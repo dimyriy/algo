@@ -153,7 +153,7 @@ class VanEmdeBoasTreeTest {
     log("Insertion of elements into tree started...");
     Arrays.stream(problemSet).forEach(tree::insert);
     log("...Insertion of elements into tree finished.");
-    final IntWrapper currentSuccessor = new IntWrapper(NULL);
+    final IntWrapper currentSuccessor = new IntWrapper();
     log("Filling resulting array with successors started...");
     final int[] result = IntStream.generate(() -> {
       currentSuccessor.x = tree.successor(currentSuccessor.x);
@@ -176,10 +176,6 @@ class VanEmdeBoasTreeTest {
 
   @SuppressWarnings("PackageVisibleField")
   private class IntWrapper {
-    int x;
-
-    IntWrapper(final int x) {
-      this.x = x;
-    }
+    int x = NULL;
   }
 }

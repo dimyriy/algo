@@ -19,7 +19,7 @@ class AStarTest {
 
   @Test
   void testFindShortestPathInGeometricalGraphReturnsCorrectPath() {
-    final GraphPathFinder<LabeledPoint2d> algorithm = new AStar<>(pathFinderTest.createGeometricalGraph());
+    final GraphPathFinder<LabeledPoint2d> algorithm = new AStar(pathFinderTest.createGeometricalGraph());
     pathFinderTest.assertShortestPathInGeoGraph(algorithm);
   }
 }

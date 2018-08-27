@@ -11,6 +11,6 @@ import java.util.List;
  * <p>
  * Copyright (c) 2018, Check24 Vergleichsportal GmbH
  */
-public interface GraphTraverser<T> {
+interface GraphTraverser<T> {
   List<AdjGraph.Vertex<T>> traverse(final AdjGraph.Vertex<T> s);
 }

@@ -29,10 +29,10 @@ public class LabeledPoint2d implements Comparable<LabeledPoint2d> {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    LabeledPoint2d that = (LabeledPoint2d) o;
+    final LabeledPoint2d that = (LabeledPoint2d) o;
     return Double.compare(that.x, x) == 0 &&
         Double.compare(that.y, y) == 0 &&
         Objects.equals(label, that.label);
@@ -44,8 +44,8 @@ public class LabeledPoint2d implements Comparable<LabeledPoint2d> {
   }
 
   public double distance(final LabeledPoint2d labeledPoint2D) {
-    double xDistance = this.x - labeledPoint2D.x;
-    double yDistance = this.y - labeledPoint2D.y;
+    final double xDistance = this.x - labeledPoint2D.x;
+    final double yDistance = this.y - labeledPoint2D.y;
     return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
   }
 }

@@ -7,6 +7,7 @@ import java.util.List;
  * @author Dmitrii Bogdanov
  * Created at 23.07.18
  */
+@SuppressWarnings("unused")
 public class CollectionUtil {
   public static <T extends Comparable<T>> void swap(@Nonnull final T[] arr, final int i, final int j) {
     final T t = arr[i];
@@ -20,10 +21,6 @@ public class CollectionUtil {
 
   public static <T> T last(final List<T> list) {
     return list.get(lastIndex(list));
-  }
-
-  public static <T> int lastIndex(final List<T> list) {
-    return list.size() - 1;
   }
 
   public static <T> int middle(final List<T> list) {
@@ -50,5 +47,9 @@ public class CollectionUtil {
     } else {
       return i - 1;
     }
+  }
+
+  private static <T> int lastIndex(final List<T> list) {
+    return list.size() - 1;
   }
 }

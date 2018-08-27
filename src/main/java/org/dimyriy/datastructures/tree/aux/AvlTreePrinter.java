@@ -13,7 +13,8 @@ import java.util.Objects;
  * @author Dmitrii Bogdanov
  * Created at 29.07.18
  */
-public class AvlTreePrinter {
+@SuppressWarnings("unused")
+class AvlTreePrinter {
   static void print(@Nonnull final AvlTree tree, @Nonnull final PrintStream printStream) {
     final int maxLevel = maxLevel(tree.getRoot());
     printNodeInternal(Collections.singletonList(tree.getRoot()), 1, maxLevel, printStream);

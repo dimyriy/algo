@@ -14,12 +14,10 @@ class AvlTreeTest {
   private static final int PROBLEM_SIZE = 100;
   private static final Random RANDOM = new Random();
   private int min;
-  private int nextMin;
 
   @BeforeEach
   void setUp() {
     min = Integer.MAX_VALUE;
-    nextMin = Integer.MAX_VALUE;
   }
 
   @Test
@@ -45,7 +43,6 @@ class AvlTreeTest {
     for (int i = 0; i < PROBLEM_SIZE; i++) {
       final int value = RANDOM.nextInt(PROBLEM_SIZE / 2);
       if (value < min) {
-        nextMin = min;
         min = value;
       }
       tree.insert(value);
