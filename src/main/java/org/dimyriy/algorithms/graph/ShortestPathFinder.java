@@ -3,6 +3,9 @@ package org.dimyriy.algorithms.graph;
 import org.dimyriy.datastructures.graph.AdjGraph;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Dmitrii Bogdanov
@@ -19,5 +22,16 @@ abstract class ShortestPathFinder<T> implements GraphPathFinder<T> {
     if (graph.getNeighborsWithWeights(source).isEmpty() || graph.getNeighborsWithWeights(target).isEmpty()) {
       throw new IllegalStateException("Graph is malformed");
     }
+  }
+
+  List<AdjGraph.Vertex<T>> reconstructPath(Node<AdjGraph.Vertex<T>> currentNode) {
+    final List<AdjGraph.Vertex<T>> path = new ArrayList<>();
+    path.add(currentNode.getVertex());
+    while (currentNode.getPredecessor() != null) {
+      path.add(currentNode.getPredecessor().getVertex());
+      currentNode = currentNode.getPredecessor();
+    }
+    Collections.reverse(path);
+    return path;
   }
 }
