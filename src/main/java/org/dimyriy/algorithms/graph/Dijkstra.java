@@ -29,7 +29,7 @@ class Dijkstra<T> extends ShortestPathFinder<T> {
     if (source.equals(target)) {
       return Collections.singletonList(source);
     }
-    findAllPaths(source);
+    findPaths(source, target);
     final Node<AdjGraph.Vertex<T>> targetNode = allNodes.get(target);
     if (targetNode == null) {
       return null;
@@ -38,10 +38,14 @@ class Dijkstra<T> extends ShortestPathFinder<T> {
     }
   }
 
-  private void findAllPaths(@Nonnull final AdjGraph.Vertex<T> source) {
+  @SuppressWarnings("ConstantConditions")
+  private void findPaths(@Nonnull final AdjGraph.Vertex<T> source, @Nonnull final AdjGraph.Vertex<T> target) {
     initialize(source);
     while (!shortestNodesQueue.isEmpty()) {
       final Node<AdjGraph.Vertex<T>> currentShortestNode = shortestNodesQueue.poll();
+      if (target != null && currentShortestNode == target.getValue()) {
+        return;
+      }
       graph.getNeighborsWithWeights(currentShortestNode.getVertex()).forEach(vertexWithEdge -> processNeighbor(currentShortestNode, vertexWithEdge));
       currentShortestNode.setVisited();
     }
@@ -70,7 +74,7 @@ class Dijkstra<T> extends ShortestPathFinder<T> {
   private void visitNode(final Node<AdjGraph.Vertex<T>> currentShortestNode,
                          final Map.Entry<AdjGraph.Vertex<T>, Integer> vertexWithEdge,
                          final Node<AdjGraph.Vertex<T>> node) {
-    final int newCost = currentShortestNode.getCost() + vertexWithEdge.getValue();
+    final double newCost = currentShortestNode.getCost() + vertexWithEdge.getValue();
     if (node.getCost() > newCost) {
       updateNodeCostAndPredecessor(currentShortestNode, node, newCost);
     }
@@ -78,7 +82,7 @@ class Dijkstra<T> extends ShortestPathFinder<T> {
 
   private void updateNodeCostAndPredecessor(final Node<AdjGraph.Vertex<T>> currentShortestNode,
                                             final Node<AdjGraph.Vertex<T>> node,
-                                            final int newCost) {
+                                            final double newCost) {
     shortestNodesQueue.remove(node);
     node.setCost(newCost);
     node.setPredecessor(currentShortestNode);

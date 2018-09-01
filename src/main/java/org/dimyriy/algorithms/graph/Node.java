@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
  */
 class Node<T> implements Comparable<Node<T>> {
   private final T vertex;
-  private int cost = Integer.MAX_VALUE;
+  private double cost = Double.MAX_VALUE;
   private Node<T> predecessor;
   private boolean visited = false;
 
@@ -18,7 +18,7 @@ class Node<T> implements Comparable<Node<T>> {
 
   @Override
   public int compareTo(@Nonnull final Node<T> o) {
-    return Integer.compare(cost, o.cost);
+    return Double.compare(cost, o.cost);
   }
 
   @Override
@@ -38,11 +38,11 @@ class Node<T> implements Comparable<Node<T>> {
     return vertex;
   }
 
-  int getCost() {
+  double getCost() {
     return cost;
   }
 
-  void setCost(final int cost) {
+  void setCost(final double cost) {
     this.cost = cost;
   }
 
