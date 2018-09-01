@@ -11,6 +11,7 @@ import java.util.List;
  * @author Dmitrii Bogdanov
  * Created at 16.08.18
  */
+@SuppressWarnings("PackageVisibleField")
 abstract class ShortestPathFinder<T> implements GraphPathFinder<T> {
   final AdjGraph<T> graph;
 

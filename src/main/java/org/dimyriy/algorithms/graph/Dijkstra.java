@@ -1,5 +1,6 @@
 package org.dimyriy.algorithms.graph;
 
+import org.dimyriy.common.IterationsNumber;
 import org.dimyriy.datastructures.graph.AdjGraph;
 
 import javax.annotation.Nonnull;
@@ -11,9 +12,10 @@ import java.util.*;
  * Created at 29.07.18
  */
 @NotThreadSafe
-class Dijkstra<T> extends ShortestPathFinder<T> {
+class Dijkstra<T> extends ShortestPathFinder<T> implements IterationsNumber {
   private final PriorityQueue<Node<AdjGraph.Vertex<T>>> shortestNodesQueue = new PriorityQueue<>();
   private final Map<AdjGraph.Vertex<T>, Node<AdjGraph.Vertex<T>>> allNodes = new HashMap<>();
+  private int numberOfEnqueues = 0;
 
   Dijkstra(@Nonnull final AdjGraph<T> graph) {
     super(graph);
@@ -22,6 +24,11 @@ class Dijkstra<T> extends ShortestPathFinder<T> {
   @Override
   public List<AdjGraph.Vertex<T>> findPath(final AdjGraph.Vertex<T> s, final AdjGraph.Vertex<T> to) {
     return findShortestPath(s, to);
+  }
+
+  @Override
+  public int getNumberOfIterations() {
+    return numberOfEnqueues;
   }
 
   private List<AdjGraph.Vertex<T>> findShortestPath(@Nonnull final AdjGraph.Vertex<T> source, @Nonnull final AdjGraph.Vertex<T> target) {
@@ -42,6 +49,7 @@ class Dijkstra<T> extends ShortestPathFinder<T> {
   private void findPaths(@Nonnull final AdjGraph.Vertex<T> source, @Nonnull final AdjGraph.Vertex<T> target) {
     initialize(source);
     while (!shortestNodesQueue.isEmpty()) {
+      numberOfEnqueues++;
       final Node<AdjGraph.Vertex<T>> currentShortestNode = shortestNodesQueue.poll();
       if (target != null && currentShortestNode == target.getValue()) {
         return;
