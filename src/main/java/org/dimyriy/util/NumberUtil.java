@@ -15,4 +15,28 @@ public class NumberUtil {
     }
     return 1 << (int) Math.ceil(Math.log10(number) * Math.log(10));
   }
+
+  public static long nextPrime(long number) {
+    while (true) {
+      boolean isPrime = true;
+      number++;
+      final int root = (int) Math.sqrt(number);
+      for (int i = 2; i <= root; i++) {
+        if (number % i == 0) {
+          isPrime = false;
+          break;
+        }
+      }
+      if (isPrime)
+        return number;
+    }
+  }
+
+  public static int log2(long number) {
+    int log2 = 0;
+    while ((number >>= 1) > 0) {
+      log2++;
+    }
+    return log2;
+  }
 }
