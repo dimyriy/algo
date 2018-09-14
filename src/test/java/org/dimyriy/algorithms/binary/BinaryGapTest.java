@@ -33,8 +33,13 @@ class BinaryGapTest {
   }
 
   @Test
-  void findMaxGapOnIntegerWithOneGapOfSizeOneReturnsOne() {
+  void findMaxGapOnSmalestPossibleGapIntegerReturnsOne() {
     Assert.assertEquals(1, new BinaryGap().findMaxGap(0b101));
+  }
+
+  @Test
+  void findMaxGapOnLargestPossibleGapIntegerReturns30() {
+    Assert.assertEquals(30, new BinaryGap().findMaxGap(0b1000_000_000_000_000_000_000_000_000_0001));
   }
 
   @Test
@@ -63,7 +68,22 @@ class BinaryGapTest {
   }
 
   @Test
-  void findMaxGapOnIntegerWithGapsOfDifferentSizesReturnsOne() {
+  void findMaxGapOnIntegerWithGapsOfDifferentSizesReturnsMaxOne() {
     Assert.assertEquals(4, new BinaryGap().findMaxGap(0b100010001000010000101));
+  }
+
+  @Test
+  void findMaxGapOnIntegerWithGapsOfDifferentSizesAndZeroedLeastSignificantBitsReturnsCorrectAnswer() {
+    Assert.assertEquals(4, new BinaryGap().findMaxGap(0b10001000100001000010000000));
+  }
+
+  @Test
+  void findMaxGapOnIntegerWithGapsOfDifferentSizesAndZeroedMostSignificantBitsReturnsCorrectAnswer() {
+    Assert.assertEquals(4, new BinaryGap().findMaxGap(0b0000000100010000100001001));
+  }
+
+  @Test
+  void findMaxGapOnIntegerWithGapsOfDifferentSizesAndZeroedMostSignificantBitsAndLeastSignificantBitsReturnsCorrectAnswer() {
+    Assert.assertEquals(4, new BinaryGap().findMaxGap(0b000000010001000010000100100000000));
   }
 }
