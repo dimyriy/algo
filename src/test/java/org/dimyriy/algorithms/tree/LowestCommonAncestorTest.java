@@ -49,7 +49,7 @@ class LowestCommonAncestorTest {
   }
 
   @Test
-  void findCLAInAMultiNodeTreeContainingSearchedChildrenReturnsCorrectLCA() {
+  void findLCAInAMultiNodeTreeContainingSearchedChildrenReturnsCorrectLCA() {
     final AvlTree tree = new AvlTree();
     tree.insert(29);
     tree.insert(21);
