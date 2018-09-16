@@ -55,11 +55,11 @@ class RabinKarpSearch extends AbstractSubstringSearch {
     }
 
     void append(final char c) {
-      hash = (hash * BASE + symbolHash(c)) % prime;
+      hash = ((hash << BASE_EXP) + symbolHash(c)) % prime;
     }
 
     void skipFirstCharAndAppendLastChar(final char firstChar, final char lastChar) {
-      hash = (((hash - (symbolHash(firstChar) * aInXMinusOneModP) % prime) * BASE) % prime + symbolHash(lastChar)) % prime;
+      hash = (((hash - (symbolHash(firstChar) * aInXMinusOneModP) % prime) << BASE_EXP) % prime + symbolHash(lastChar)) % prime;
     }
 
     int symbolHash(final char symbol) {
@@ -73,7 +73,7 @@ class RabinKarpSearch extends AbstractSubstringSearch {
     private int calculateAInXMinusOneModP(final int windowSize) {
       int aInXMinusOneModP = 1;
       for (int i = 0; i < windowSize - 1; i++) {
-        aInXMinusOneModP = (aInXMinusOneModP * BASE) % prime;
+        aInXMinusOneModP = (aInXMinusOneModP << BASE_EXP) % prime;
       }
       return aInXMinusOneModP;
     }
