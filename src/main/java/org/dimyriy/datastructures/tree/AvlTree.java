@@ -1,5 +1,7 @@
 package org.dimyriy.datastructures.tree;
 
+import java.util.NoSuchElementException;
+
 import static java.lang.Math.max;
 
 /**
@@ -19,6 +21,13 @@ public class AvlTree implements SuccessorAware<AvlTree.Node, AvlTree.Node>, Inse
 
   public Node findMinimum() {
     return root.findMinimum();
+  }
+
+  public Node get(final int key) {
+    if (root == null) {
+      throw new NoSuchElementException();
+    }
+    return root.find(key);
   }
 
   @Override
@@ -179,6 +188,22 @@ public class AvlTree implements SuccessorAware<AvlTree.Node, AvlTree.Node>, Inse
 
     public Node getRight() {
       return right;
+    }
+
+    Node find(final int key) {
+      if (this.getKey() == key) {
+        return this;
+      } else if (key < this.getKey()) {
+        if (this.left == null) {
+          throw new NoSuchElementException();
+        }
+        return this.getLeft().find(key);
+      } else {
+        if (this.right == null) {
+          throw new NoSuchElementException();
+        }
+        return this.getRight().find(key);
+      }
     }
 
     Node findMinimum() {
