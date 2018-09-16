@@ -1,10 +1,14 @@
 package org.dimyriy.util;
 
+import java.util.Random;
+
 /**
  * @author Dmitrii Bogdanov
  * Created at 09.08.18
  */
 public class NumberUtil {
+  private static final Random RANDOM = new Random();
+
   public static boolean isPowerOfTwo(final int number) {
     return number != 0 && (number & (number - 1)) == 0;
   }
@@ -20,8 +24,8 @@ public class NumberUtil {
     while (true) {
       boolean isPrime = true;
       number++;
-      final int root = (int) Math.sqrt(number);
-      for (int i = 2; i <= root; i++) {
+      final long root = (long) Math.ceil(Math.sqrt(number));
+      for (long i = 2; i <= root; i++) {
         if (number % i == 0) {
           isPrime = false;
           break;
@@ -30,5 +34,13 @@ public class NumberUtil {
       if (isPrime)
         return number;
     }
+  }
+
+  public static int nextRandomPrime(final int limit) {
+    return (int) NumberUtil.nextPrime(Math.abs((int) (nextRandomPrime() % limit)));
+  }
+
+  private static long nextRandomPrime() {
+    return NumberUtil.nextPrime(RANDOM.nextInt() * RANDOM.nextInt());
   }
 }
