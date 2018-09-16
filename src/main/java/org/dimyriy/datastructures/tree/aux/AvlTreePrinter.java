@@ -14,8 +14,8 @@ import java.util.Objects;
  * Created at 29.07.18
  */
 @SuppressWarnings("unused")
-class AvlTreePrinter {
-  static void print(@Nonnull final AvlTree tree, @Nonnull final PrintStream printStream) {
+public class AvlTreePrinter {
+  public static void print(@Nonnull final AvlTree tree, @Nonnull final PrintStream printStream) {
     final int maxLevel = maxLevel(tree.getRoot());
     printNodeInternal(Collections.singletonList(tree.getRoot()), 1, maxLevel, printStream);
   }
@@ -24,7 +24,10 @@ class AvlTreePrinter {
     if (nodes.isEmpty() || nodes.stream().noneMatch(Objects::nonNull))
       return;
 
-    final int floor = maxLevel - level;
+    int floor = maxLevel - level;
+    if (floor < 1) {
+      floor = 1;
+    }
     final int edgeLines = 1 << (Math.max(floor - 1, 0));
     final int firstSpaces = 1 << floor - 1;
     final int betweenSpaces = 1 << (floor + 1) - 1;
