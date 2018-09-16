@@ -33,8 +33,8 @@ class RabinKarpSearch extends AbstractSubstringSearch {
   private static final class MutableHashedString {
     private int hash = 0;
 
-    MutableHashedString(final int termLength, @Nonnull final char[] string) {
-      for (int i = 0; i < termLength; i++) {
+    MutableHashedString(final int windowSize, @Nonnull final char[] string) {
+      for (int i = 0; i < windowSize; i++) {
         append(string[i]);
       }
     }
@@ -48,11 +48,11 @@ class RabinKarpSearch extends AbstractSubstringSearch {
     }
 
     void append(final char symbol) {
-      hash += symbol;
+      hash += (int) symbol;
     }
 
     void skip(final char symbol) {
-      hash -= symbol;
+      hash -= (int) symbol;
     }
   }
 }

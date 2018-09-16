@@ -31,12 +31,4 @@ public class NumberUtil {
         return number;
     }
   }
-
-  public static int log2(long number) {
-    int log2 = 0;
-    while ((number >>= 1) > 0) {
-      log2++;
-    }
-    return log2;
-  }
 }
