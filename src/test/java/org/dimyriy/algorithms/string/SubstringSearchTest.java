@@ -14,7 +14,7 @@ import java.util.Random;
 class SubstringSearchTest {
   private static final Random RANDOM = new Random();
   private static final int MAX_STRING_SIZE = (int) Math.min(Runtime.getRuntime().maxMemory() >> 2, 1 << 25);
-  private final String source = "dsjkhkrhjhbwbtbg,mnbjkahstjkghfajnr.nasdjhjsdhbfhbtvqghmewhb,hjbybthj4,hbghbrdbsearchtermklfjdslkfrjtbhbtnbsn,mbgmfhfurg";
+  private final String source = "dsjkhkrhjhbwbtbgmnbjkahstjkghfajnrnasdjhjsdhbfhbtvqghmewhbhjbybthjhbghbrdbsearchtermklfjdslkfrjtbhbtnbsnmbgmfhfurg";
   private final String term = "searchterm";
   private final String longSearchTerm = source;
 
