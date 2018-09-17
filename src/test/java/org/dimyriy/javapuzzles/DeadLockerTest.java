@@ -10,14 +10,37 @@ import org.junit.jupiter.api.Test;
 class DeadLockerTest {
 
   @Test
-  void testDeadlockBlocksThreadsOnWaiting() throws InterruptedException {
+  void testDeadlockOnLocksBlocksThreadsOnWaiting() {
     final DeadLocker deadLocker = new DeadLocker(false);
-    new Thread(deadLocker::deadlock).start();
-    while (!deadLocker.isFirstLockLocked.get() && !deadLocker.isSecondLockLocked.get()) {
-      Thread.sleep(1L);
+    new Thread(deadLocker::deadlockOnLocks).start();
+    while (!deadLocker.isFirstLockLocked() && !deadLocker.isSecondLockLocked()) {
+      sleepUninterruptedly(1L);
     }
-    Thread.sleep(1000L);
-    Assertions.assertEquals(Thread.State.WAITING, deadLocker.firstThread.getState());
-    Assertions.assertEquals(Thread.State.WAITING, deadLocker.secondThread.getState());
+    sleepAndAssertThreadsState(deadLocker, Thread.State.WAITING);
+  }
+
+  @Test
+  void testDeadlockOnMonitorsBlocksThreadsOnBlocked() {
+    final DeadLocker deadLocker = new DeadLocker(false);
+    new Thread(deadLocker::deadlockOnMonitors).start();
+    while (!deadLocker.isFirstLockLocked() && !deadLocker.isSecondLockLocked()) {
+      sleepUninterruptedly(1L);
+    }
+    sleepAndAssertThreadsState(deadLocker, Thread.State.BLOCKED);
+  }
+
+  private void sleepAndAssertThreadsState(final DeadLocker deadLocker, final Thread.State threadState) {
+    sleepUninterruptedly(1000L);
+    Assertions.assertEquals(threadState, deadLocker.getFirstThreadState());
+    Assertions.assertEquals(threadState, deadLocker.getSecondThreadState());
+  }
+
+  @SuppressWarnings("ResultOfMethodCallIgnored")
+  private void sleepUninterruptedly(final long millis) {
+    try {
+      Thread.sleep(millis);
+    } catch (InterruptedException e) {
+      Thread.interrupted();
+    }
   }
 }
