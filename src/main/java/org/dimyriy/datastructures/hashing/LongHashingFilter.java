@@ -2,31 +2,16 @@ package org.dimyriy.datastructures.hashing;
 
 import org.dimyriy.util.NumberUtil;
 
-import java.util.BitSet;
-
 /**
  * @author Dmitrii Bogdanov
- * Created at 16.09.18
+ * Created at 17.09.18
  */
-class IntBloomFilter {
-  private final BitSet bitSet;
-  private final IntHashFunction intHashFunction;
+public interface LongHashingFilter {
+  void insert(final long key);
 
-  IntBloomFilter(final int capacity) {
-    bitSet = new BitSet(capacity);
-    intHashFunction = new IntHashFunction(capacity);
-  }
+  boolean contains(final long key);
 
-  void insert(final long key) {
-    bitSet.set(intHashFunction.firstHash(key, bitSet.size() - 1));
-    bitSet.set(intHashFunction.secondHash(key, bitSet.size() - 1));
-  }
-
-  boolean contains(final long key) {
-    return bitSet.get(intHashFunction.firstHash(key, bitSet.length() - 1)) && bitSet.get(intHashFunction.firstHash(key, bitSet.length() - 1));
-  }
-
-  private static class IntHashFunction {
+  class IntHashFunction {
     private final int prime1;
     private final int prime2;
     private final int nonRandomSalt11 = 0b10110110110011010;
