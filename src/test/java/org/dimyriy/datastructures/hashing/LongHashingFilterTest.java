@@ -16,8 +16,8 @@ import static org.hamcrest.Matchers.lessThan;
 class LongHashingFilterTest {
 
   @Test
-  void testSmallPositiveProbabilityIsLessThanTwentyPercentForBloomFilter() {
-    assertFalsePositiveProbabilityForFilterIsLessThanMaxProbability(createBloomFilter(), 20.);
+  void testSmallPositiveProbabilityIsLessThanSixtyPercentForBloomFilter() {
+    assertFalsePositiveProbabilityForFilterIsLessThanMaxProbability(createBloomFilter(), 60.);
   }
 
   @Test
