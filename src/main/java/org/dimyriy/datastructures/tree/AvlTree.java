@@ -73,6 +73,12 @@ public class AvlTree implements SuccessorAware<AvlTree.Node, AvlTree.Node>, Inse
   }
 
   private Node insert(final Node node, final int key) {
+    final Node x = insertActualNode(node, key);
+    if (x != null) return x;
+    return rotateIfUnbalanced(node, key);
+  }
+
+  private Node insertActualNode(final Node node, final int key) {
     if (node == null) {
       return new Node(key);
     }
@@ -93,7 +99,10 @@ public class AvlTree implements SuccessorAware<AvlTree.Node, AvlTree.Node>, Inse
     }
 
     node.height = 1 + max(height(node.left), height(node.right));
+    return null;
+  }
 
+  private Node rotateIfUnbalanced(final Node node, final int key) {
     final int balance = balance(node);
     if (isLeftHeavy(balance) && key < node.left.key) {
       return rotateClockwise(node);

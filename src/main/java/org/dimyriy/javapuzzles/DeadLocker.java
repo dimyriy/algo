@@ -16,7 +16,7 @@ class DeadLocker {
 
 
   DeadLocker(final boolean enableLogging) {
-    Configuration.INSTANCE = new Configuration(enableLogging);
+    Configuration.instance = new Configuration(enableLogging);
     final AtomicBoolean isSecondLockLocked = new AtomicBoolean(false);
     final AtomicBoolean isFirstLockLocked = new AtomicBoolean(false);
     final NamedReentrantLock firstLock = new NamedReentrantLock("A");
@@ -109,6 +109,7 @@ class DeadLocker {
   }
 
   private static void noop() {
+    // Do nothing is intended
   }
 
   private static class ThreadPair {
@@ -158,7 +159,7 @@ class DeadLocker {
   }
 
   private static class Configuration {
-    private static Configuration INSTANCE = new Configuration(false);
+    private static Configuration instance = new Configuration(false);
     private final boolean isLoggingEnabled;
 
     Configuration(final boolean isLoggingEnabled) {
@@ -166,7 +167,7 @@ class DeadLocker {
     }
 
     static boolean isLoggingEnabled() {
-      return INSTANCE.isLoggingEnabled;
+      return instance.isLoggingEnabled;
     }
   }
 

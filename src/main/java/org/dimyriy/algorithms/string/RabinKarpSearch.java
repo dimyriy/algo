@@ -54,6 +54,11 @@ class RabinKarpSearch extends AbstractSubstringSearch {
       return hash == that.hash;
     }
 
+    @Override
+    public int hashCode() {
+      return this.hash;
+    }
+
     void append(final char c) {
       hash = ((hash << BASE_EXP) + symbolHash(c)) % prime;
     }
@@ -67,15 +72,15 @@ class RabinKarpSearch extends AbstractSubstringSearch {
     }
 
     private int choosePrime() {
-      return (int) NumberUtil.nextPrime(BASE + 1);
+      return (int) NumberUtil.nextPrime(BASE + 1L);
     }
 
     private int calculateAInXMinusOneModP(final int windowSize) {
-      int aInXMinusOneModP = 1;
+      int aInWindowSizeMinusOneModP = 1;
       for (int i = 0; i < windowSize - 1; i++) {
-        aInXMinusOneModP = (aInXMinusOneModP << BASE_EXP) % prime;
+        aInWindowSizeMinusOneModP = (aInWindowSizeMinusOneModP << BASE_EXP) % prime;
       }
-      return aInXMinusOneModP;
+      return aInWindowSizeMinusOneModP;
     }
   }
 }

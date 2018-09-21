@@ -15,6 +15,9 @@ import java.util.Objects;
  */
 @SuppressWarnings("unused")
 public class AvlTreePrinter {
+  private AvlTreePrinter() {
+  }
+
   public static void print(@Nonnull final AvlTree tree, @Nonnull final PrintStream printStream) {
     final int maxLevel = maxLevel(tree.getRoot());
     printNodeInternal(Collections.singletonList(tree.getRoot()), 1, maxLevel, printStream);
@@ -51,32 +54,39 @@ public class AvlTreePrinter {
     out.println();
 
     for (int i = 1; i <= edgeLines; i++) {
-      for (final AvlTree.Node node : nodes) {
-        printWhitespaces(firstSpaces - i, out);
-        if (node == null) {
-          printWhitespaces(edgeLines + edgeLines + i + 1, out);
-          continue;
-        }
-
-        if (node.getLeft() != null)
-          out.print("/");
-        else
-          printWhitespaces(1, out);
-
-        printWhitespaces(i + i - 1, out);
-
-        if (node.getRight() != null)
-          out.print("\\");
-        else
-          printWhitespaces(1, out);
-
-        printWhitespaces(edgeLines + edgeLines - i, out);
-      }
-
+      printEdge(nodes, out, edgeLines, firstSpaces, i);
       out.println();
     }
 
     printNodeInternal(newNodes, level + 1, maxLevel, out);
+  }
+
+  private static void printEdge(@Nonnull final List<AvlTree.Node> nodes,
+                                @Nonnull final PrintStream out,
+                                final int edgeLines,
+                                final int firstSpaces,
+                                final int i) {
+    for (final AvlTree.Node node : nodes) {
+      printWhitespaces(firstSpaces - i, out);
+      if (node == null) {
+        printWhitespaces(edgeLines + edgeLines + i + 1, out);
+        continue;
+      }
+
+      if (node.getLeft() != null)
+        out.print("/");
+      else
+        printWhitespaces(1, out);
+
+      printWhitespaces(i + i - 1, out);
+
+      if (node.getRight() != null)
+        out.print("\\");
+      else
+        printWhitespaces(1, out);
+
+      printWhitespaces(edgeLines + edgeLines - i, out);
+    }
   }
 
   private static void printWhitespaces(final int count, @Nonnull final PrintStream out) {

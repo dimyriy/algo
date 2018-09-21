@@ -21,7 +21,7 @@ class IntegerReversal {
     int result = 0;
     for (int i = nDigits - 1; i >= 0; i--) {
       final int divisor = powerOf10(i);
-      final int ithDigit = getIthDigit(number, i, divisor);
+      final int ithDigit = getIthDigit(number, divisor);
       number -= ithDigit * divisor;
       result += ithDigit * powerOf10(nDigits - i - 1);
     }
@@ -38,16 +38,12 @@ class IntegerReversal {
     return (int) Math.floor(Math.log10(number)) + 1;
   }
 
-  int getIthDigit(final int number, final int i) {
+  private int getIthDigit(final int number, final int i) {
     final int divisor = powerOf10(i - 1);
     return (number - number % divisor) / divisor;
   }
 
   private int powerOf10(final int exp) {
     return (int) Math.pow(10, exp);
-  }
-
-  private int getIthDigit(final int number, final int i, final int divisor) {
-    return (number - number % divisor) / divisor;
   }
 }

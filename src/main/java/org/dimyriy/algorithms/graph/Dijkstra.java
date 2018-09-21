@@ -39,7 +39,7 @@ class Dijkstra<T> extends ShortestPathFinder<T> implements IterationsNumber {
     findPaths(source, target);
     final Node<AdjGraph.Vertex<T>> targetNode = allNodes.get(target);
     if (targetNode == null) {
-      return null;
+      return Collections.emptyList();
     } else {
       return reconstructPath(targetNode);
     }
@@ -51,7 +51,7 @@ class Dijkstra<T> extends ShortestPathFinder<T> implements IterationsNumber {
     while (!shortestNodesQueue.isEmpty()) {
       numberOfEnqueues++;
       final Node<AdjGraph.Vertex<T>> currentShortestNode = shortestNodesQueue.poll();
-      if (target != null && currentShortestNode == target.getValue()) {
+      if (currentShortestNode == target.getValue()) {
         return;
       }
       graph.getNeighborsWithWeights(currentShortestNode.getVertex()).forEach(vertexWithEdge -> processNeighbor(currentShortestNode, vertexWithEdge));

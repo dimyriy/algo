@@ -3,6 +3,7 @@ package org.dimyriy.algorithms.graph;
 import org.dimyriy.datastructures.graph.AdjGraph;
 
 import javax.annotation.concurrent.NotThreadSafe;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class DFS<T> implements GraphPathFinder<T>, GraphTraverser<T> {
   @Override
   public List<AdjGraph.Vertex<T>> findPath(final AdjGraph.Vertex<T> s, final AdjGraph.Vertex<T> to) {
     visited.add(s);
-    return null;
+    return Collections.emptyList();
   }
 
   @Override

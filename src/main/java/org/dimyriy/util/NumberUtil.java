@@ -9,6 +9,9 @@ import java.util.Random;
 public class NumberUtil {
   private static final Random RANDOM = new Random();
 
+  private NumberUtil() {
+  }
+
   public static boolean isPowerOfTwo(final int number) {
     return number != 0 && (number & (number - 1)) == 0;
   }
@@ -41,6 +44,6 @@ public class NumberUtil {
   }
 
   private static long nextRandomPrime() {
-    return NumberUtil.nextPrime(RANDOM.nextInt() * RANDOM.nextInt());
+    return NumberUtil.nextPrime((long) RANDOM.nextInt() * RANDOM.nextInt());
   }
 }

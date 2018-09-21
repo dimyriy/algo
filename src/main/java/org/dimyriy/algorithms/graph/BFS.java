@@ -21,7 +21,7 @@ class BFS<T> implements GraphPathFinder<T>, GraphTraverser<T> {
     final Queue<AdjGraph.Vertex<T>> queue = new ArrayDeque<>();
     visited.add(s);
     queue.add(s);
-    while (queue.size() != 0) {
+    while (!queue.isEmpty()) {
       final AdjGraph.Vertex<T> node = queue.poll();
       if (node.equals(to)) {
         if (!visited.contains(to)) {
@@ -44,7 +44,7 @@ class BFS<T> implements GraphPathFinder<T>, GraphTraverser<T> {
     final Queue<AdjGraph.Vertex<T>> queue = new ArrayDeque<>();
     visited.add(s);
     queue.add(s);
-    while (queue.size() != 0) {
+    while (!queue.isEmpty()) {
       final AdjGraph.Vertex<T> node = queue.poll();
       for (final AdjGraph.Vertex<T> neighbor : graph.getNeighbors(node)) {
         if (!visited.contains(neighbor)) {

@@ -23,6 +23,6 @@ class LongBloomFilter implements LongHashingFilter {
 
   @Override
   public boolean contains(final long key) {
-    return bitSet.get(intHashFunction.firstHash(key, bitSet.length() - 1)) && bitSet.get(intHashFunction.firstHash(key, bitSet.length() - 1));
+    return bitSet.get(intHashFunction.firstHash(key, bitSet.length() - 1)) && bitSet.get(intHashFunction.secondHash(key, bitSet.length() - 1));
   }
 }

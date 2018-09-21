@@ -26,7 +26,8 @@ class Fibonacci {
     if (n < 2) {
       return n;
     }
-    int current = 1, previous = 0;
+    int current = 1;
+    int previous = 0;
     for (int i = 1; i < n; i++) {
       final int temp = current + previous;
       previous = current;

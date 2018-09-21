@@ -9,28 +9,7 @@ import javax.annotation.Nonnull;
  * Created at 23.07.18
  */
 public class Heap {
-  public static <T extends Comparable<T>> boolean isMaxHeap(@Nonnull final T[] arr, final int size) {
-    for (int i = 0; i < size; i++) {
-      if (!isMaxHeapAt(arr, i, size)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  public static <T extends Comparable<T>> boolean isMaxHeapAt(final T[] arr, final int i, final int size) {
-    guard(i, size);
-    if (isLeave(i, size)) {
-      return true;
-    } else {
-      final int left = left(i);
-      final int right = right(i);
-      if (right >= size) {
-        return arr[i].compareTo(arr[left]) >= 0;
-      } else {
-        return arr[i].compareTo(arr[left]) >= 0 && arr[i].compareTo(arr[right]) >= 0;
-      }
-    }
+  private Heap() {
   }
 
   public static <T extends Comparable<T>> void buildMaxHeap(@Nonnull final T[] arr, final int size) {
@@ -54,6 +33,30 @@ public class Heap {
     if (largestElement != i) {
       CollectionUtil.swap(arr, i, largestElement);
       maxHeapify(arr, size, largestElement);
+    }
+  }
+
+  static <T extends Comparable<T>> boolean isMaxHeap(@Nonnull final T[] arr, final int size) {
+    for (int i = 0; i < size; i++) {
+      if (!isMaxHeapAt(arr, i, size)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  static <T extends Comparable<T>> boolean isMaxHeapAt(final T[] arr, final int i, final int size) {
+    guard(i, size);
+    if (isLeave(i, size)) {
+      return true;
+    } else {
+      final int left = left(i);
+      final int right = right(i);
+      if (right >= size) {
+        return arr[i].compareTo(arr[left]) >= 0;
+      } else {
+        return arr[i].compareTo(arr[left]) >= 0 && arr[i].compareTo(arr[right]) >= 0;
+      }
     }
   }
 
