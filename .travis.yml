@@ -1,3 +1,9 @@
 language: java
-after_success:
-- mvn clean test --activate-profiles travis-ci jacoco:report coveralls:report -DrepoToken=$COVERALLS_REPO_TOKEN
+addons:
+  sonarcloud:
+    organization: "dimyriy-github"
+    token:
+      secure: $SONAR_TOKEN
+
+script:
+- mvn clean test install --activate-profiles travis-ci sonar:sonar jacoco:report coveralls:report -DrepoToken=$COVERALLS_REPO_TOKEN
