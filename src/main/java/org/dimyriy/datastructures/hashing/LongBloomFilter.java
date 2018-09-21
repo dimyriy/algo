@@ -17,12 +17,12 @@ class LongBloomFilter implements LongHashingFilter {
 
   @Override
   public void insert(final long key) {
-    bitSet.set(intHashFunction.firstHash(key, bitSet.size() - 1));
-    bitSet.set(intHashFunction.secondHash(key, bitSet.size() - 1));
+    bitSet.set(intHashFunction.firstHash(key));
+    bitSet.set(intHashFunction.secondHash(key));
   }
 
   @Override
   public boolean contains(final long key) {
-    return bitSet.get(intHashFunction.firstHash(key, bitSet.length() - 1)) && bitSet.get(intHashFunction.secondHash(key, bitSet.length() - 1));
+    return bitSet.get(intHashFunction.firstHash(key)) && bitSet.get(intHashFunction.secondHash(key));
   }
 }

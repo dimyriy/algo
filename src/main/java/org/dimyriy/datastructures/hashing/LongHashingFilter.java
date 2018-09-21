@@ -26,16 +26,16 @@ public interface LongHashingFilter {
       prime2 = NumberUtil.nextRandomPrime(universeSize * 121);
     }
 
-    int firstHash(final long key, final int universeSize) {
-      return generateHash(key, universeSize, SHIFT_1, NON_RANDOM_SALT_11, NON_RANDOM_SALT_12, prime1);
+    int firstHash(final long key) {
+      return generateHash(key, SHIFT_1, NON_RANDOM_SALT_11, NON_RANDOM_SALT_12, prime1);
     }
 
-    int secondHash(final long key, final int universeSize) {
-      return generateHash(key, universeSize, SHIFT_2, NON_RANDOM_SALT_21, NON_RANDOM_SALT_22, prime2);
+    int secondHash(final long key) {
+      return generateHash(key, SHIFT_2, NON_RANDOM_SALT_21, NON_RANDOM_SALT_22, prime2);
     }
 
-    private int generateHash(final long key, final int universeSize, final int shift, final int salt1, final int salt2, final int mod) {
-      return (int) (Math.abs(((((key & salt1) << shift) ^ (key ^ salt2)) % mod))) % universeSize;
+    private int generateHash(final long key, final int shift, final int salt1, final int salt2, final int mod) {
+      return (int) Math.abs(((((key & salt1) << shift) ^ (key ^ salt2)) % mod));
     }
   }
 }
