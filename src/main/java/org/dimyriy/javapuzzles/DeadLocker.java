@@ -1,5 +1,7 @@
 package org.dimyriy.javapuzzles;
 
+import org.dimyriy.aux.SystemOutLogger;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
@@ -15,8 +17,7 @@ class DeadLocker {
   private final Context secondContext;
 
 
-  DeadLocker(final boolean enableLogging) {
-    Configuration.instance = new Configuration(enableLogging);
+  DeadLocker() {
     final AtomicBoolean isSecondLockLocked = new AtomicBoolean(false);
     final AtomicBoolean isFirstLockLocked = new AtomicBoolean(false);
     final NamedReentrantLock firstLock = new NamedReentrantLock("A");
@@ -27,14 +28,14 @@ class DeadLocker {
   }
 
   void deadlockOnLocks() {
-    log("Start...");
+    LogSupport.logStart();
     threadPair.initializeFirstThreadWithRunnable(() -> lockFirstLockSetConditionWaitForCheckConditionAndLockSecondLock(firstContext));
     threadPair.initializeSecondThreadWithRunnable(() -> lockFirstLockSetConditionWaitForCheckConditionAndLockSecondLock(secondContext));
     threadPair.startThreads();
   }
 
   void deadlockOnMonitors() {
-    log("Start...");
+    LogSupport.logStart();
     threadPair.initializeFirstThreadWithRunnable(() -> blockFirstBLockSetConditionWaitForCheckConditionAndBLockSecondBLock(firstContext));
     threadPair.initializeSecondThreadWithRunnable(() -> blockFirstBLockSetConditionWaitForCheckConditionAndBLockSecondBLock(secondContext));
     threadPair.startThreads();
@@ -60,51 +61,45 @@ class DeadLocker {
 
   @SuppressWarnings({"StatementWithEmptyBody", "SynchronizationOnLocalVariableOrMethodParameter"})
   private void blockFirstBLockSetConditionWaitForCheckConditionAndBLockSecondBLock(final Context context) {
-    log("...Entering monitor ", context.getFirst().getName(), " started...");
+    LogSupport.logEnteringMonitorStarted(context.getFirst());
     synchronized (context.getFirst()) {
-      log("...Entering monitor ", context.getFirst().getName(), " finished...");
-      log("...Setting the entered condition for monitor ", context.getFirst().getName(), " is started...");
+      LogSupport.logEnteringMonitorFinished(context.getFirst());
+      LogSupport.logSettingEnteredConditionForMonitorStarted(context.getFirst());
       context.getSetCondition().set(true);
-      log("...Setting the entered condition for monitor ", context.getFirst().getName(), " is finished...");
-      log("...Waiting on condition for monitor ", context.getSecond().getName(), " to be entered...");
+      LogSupport.logSettingEnteredConditionForMonitorFinished(context.getFirst());
+      LogSupport.logWaitingOnConditionForMonitorStarted(context.getSecond());
       while (!context.getCheckCondition().get()) {
         noop();
       }
-      log("...Waiting on condition for monitor ", context.getSecond().getName(), " to be entered...");
-      log("...Entering monitor ", context.getSecond().getName(), " started...");
+      LogSupport.logWaitingOnConditionForMonitorFinished(context.getSecond());
+      LogSupport.logEnteringMonitorStarted(context.getSecond());
       synchronized (context.getSecond()) {
-        log("...Entering monitor ", context.getSecond().getName(), " finished...");
+        LogSupport.logEnteringMonitorFinished(context.getSecond());
       }
     }
   }
 
   @SuppressWarnings("StatementWithEmptyBody")
   private void lockFirstLockSetConditionWaitForCheckConditionAndLockSecondLock(final Context context) {
-    log("...Acquiring lock ", context.first.getName(), " started...");
-    context.first.lock();
+    LogSupport.logAcquiringLockStarted(context.getFirst());
+    context.getFirst().lock();
     try {
-      log("...Acquiring lock ", context.first.getName(), " finished...");
-      log("...Setting the condition for lock ", context.first.getName(), " is started...");
+      LogSupport.logAcquiringLockFinished(context.getFirst());
+      LogSupport.logSettingConditionForLockStarted(context.getFirst());
       context.setCondition.set(true);
-      log("...Setting the condition for lock ", context.first.getName(), " is finished...");
-      log("...Waiting on condition for lock ", context.second.getName(), " to be acquired...");
+      LogSupport.logSettingConditionForLockFinished(context.getFirst());
+      LogSupport.logWaitingOnConditionForLockStarted(context.getSecond());
       while (!context.checkCondition.get()) {
         noop();
       }
-      log("...Waiting on condition for lock ", context.second.getName(), " to be acquired finished...");
-      log("...Acquiring lock ", context.second.getName(), " started...");
-      context.second.lock();
-      log("...Acquiring lock ", context.second.getName(), " finished...");
+      LogSupport.logWaitingOnConditionForLockFinished(context.getSecond());
+      LogSupport.logAcquiringLockStarted(context.getSecond());
+      context.getSecond().lock();
+      LogSupport.logAcquiringLockFinished(context.getSecond());
     } finally {
-      log("...Unlocking lock ", context.first.getName(), " started...");
-      context.first.unlock();
-      log("...Unlocking lock ", context.first.getName(), " finished...");
-    }
-  }
-
-  private static void log(final String... strings) {
-    if (Configuration.isLoggingEnabled()) {
-      System.out.println(String.join("", strings));
+      LogSupport.logUnlockingLockStarted(context.getFirst());
+      context.getFirst().unlock();
+      LogSupport.logUnlockingLockFinished(context.getFirst());
     }
   }
 
@@ -131,9 +126,9 @@ class DeadLocker {
 
     void initializeThreadWithRunnable(final AtomicReference<Thread> threadReference, final Runnable runnable, final String name) {
       threadReference.set(new Thread(() -> {
-        log("...thread for ", name, " started...");
+        LogSupport.logThreadStarted(name);
         runnable.run();
-        log("...thread for ", name, " finished...");
+        LogSupport.logThreadFinished(name);
       }));
     }
 
@@ -155,19 +150,6 @@ class DeadLocker {
 
     String getName() {
       return name;
-    }
-  }
-
-  private static class Configuration {
-    private static Configuration instance = new Configuration(false);
-    private final boolean isLoggingEnabled;
-
-    Configuration(final boolean isLoggingEnabled) {
-      this.isLoggingEnabled = isLoggingEnabled;
-    }
-
-    static boolean isLoggingEnabled() {
-      return instance.isLoggingEnabled;
     }
   }
 
@@ -201,6 +183,89 @@ class DeadLocker {
 
     AtomicBoolean getCheckCondition() {
       return checkCondition;
+    }
+  }
+
+  private static class LogSupport {
+    private static final String ACQUIRING_LOCK = "...Acquiring lock ";
+    private static final String ENTERING_MONITOR = "...Entering monitor ";
+    private static final String SETTING_THE_CONDITION_FOR_LOCK = "...Setting the condition for lock ";
+    private static final String WAITING_ON_CONDITION_FOR_LOCK = "...Waiting on condition for lock ";
+    private static final String UNLOCKING_LOCK = "...Unlocking lock ";
+    private static final String STARTED = " started...";
+    private static final String FINISHED = " finished...";
+    private static final String TO_BE_ACQUIRED = " to be acquired ";
+    private static final String SETTING_THE_ENTERED_CONDITION_FOR_MONITOR = "...Setting the entered condition for monitor ";
+    private static final String WAITING_ON_CONDITION_FOR_MONITOR = "...Waiting on condition for monitor ";
+    private static final String TO_BE_ENTERED = " to be entered ";
+    private static final String START = "Start...";
+
+    private static void logThreadStarted(final String name) {
+      SystemOutLogger.log("...thread for ", name, STARTED);
+    }
+
+    private static void logThreadFinished(final String name) {
+      SystemOutLogger.log("...thread for ", name, FINISHED);
+    }
+
+    private static void logStart() {
+      SystemOutLogger.log(START);
+    }
+
+    private static void logWaitingOnConditionForLockFinished(final NamedReentrantLock lock) {
+      SystemOutLogger.log(WAITING_ON_CONDITION_FOR_LOCK, lock.getName(), TO_BE_ACQUIRED, FINISHED);
+    }
+
+    private static void logSettingConditionForLockStarted(final NamedReentrantLock lock) {
+      SystemOutLogger.log(SETTING_THE_CONDITION_FOR_LOCK, lock.getName(), STARTED);
+    }
+
+    private static void logSettingConditionForLockFinished(final NamedReentrantLock lock) {
+      SystemOutLogger.log(SETTING_THE_CONDITION_FOR_LOCK, lock.getName(), FINISHED);
+    }
+
+    private static void logAcquiringLockStarted(final NamedReentrantLock lock) {
+      SystemOutLogger.log(ACQUIRING_LOCK, lock.getName(), STARTED);
+    }
+
+    private static void logAcquiringLockFinished(final NamedReentrantLock lock) {
+      SystemOutLogger.log(ACQUIRING_LOCK, lock.getName(), FINISHED);
+    }
+
+    private static void logUnlockingLockStarted(final NamedReentrantLock lock) {
+      SystemOutLogger.log(UNLOCKING_LOCK, lock.getName(), STARTED);
+    }
+
+    private static void logUnlockingLockFinished(final NamedReentrantLock lock) {
+      SystemOutLogger.log(UNLOCKING_LOCK, lock.getName(), FINISHED);
+    }
+
+    private static void logEnteringMonitorStarted(final NamedReentrantLock lock) {
+      SystemOutLogger.log(ENTERING_MONITOR, lock.getName(), STARTED);
+    }
+
+    private static void logEnteringMonitorFinished(final NamedReentrantLock lock) {
+      SystemOutLogger.log(ENTERING_MONITOR, lock.getName(), FINISHED);
+    }
+
+    private static void logSettingEnteredConditionForMonitorStarted(final NamedReentrantLock lock) {
+      SystemOutLogger.log(SETTING_THE_ENTERED_CONDITION_FOR_MONITOR, lock.getName(), STARTED);
+    }
+
+    private static void logSettingEnteredConditionForMonitorFinished(final NamedReentrantLock lock) {
+      SystemOutLogger.log(SETTING_THE_ENTERED_CONDITION_FOR_MONITOR, lock.getName(), FINISHED);
+    }
+
+    private static void logWaitingOnConditionForMonitorStarted(final NamedReentrantLock lock) {
+      SystemOutLogger.log(WAITING_ON_CONDITION_FOR_MONITOR, lock.getName(), TO_BE_ENTERED, STARTED);
+    }
+
+    private static void logWaitingOnConditionForMonitorFinished(final NamedReentrantLock lock) {
+      SystemOutLogger.log(WAITING_ON_CONDITION_FOR_MONITOR, lock.getName(), TO_BE_ENTERED, FINISHED);
+    }
+
+    private static void logWaitingOnConditionForLockStarted(final NamedReentrantLock lock) {
+      SystemOutLogger.log(WAITING_ON_CONDITION_FOR_LOCK, lock.getName(), TO_BE_ACQUIRED, STARTED);
     }
   }
 }

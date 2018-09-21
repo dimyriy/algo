@@ -11,7 +11,7 @@ class DeadLockerTest {
 
   @Test
   void testDeadlockOnLocksBlocksThreadsOnWaiting() {
-    final DeadLocker deadLocker = new DeadLocker(false);
+    final DeadLocker deadLocker = new DeadLocker();
     new Thread(deadLocker::deadlockOnLocks).start();
     while (!deadLocker.isFirstLockLocked() && !deadLocker.isSecondLockLocked()) {
       sleepUninterruptedly(1L);
@@ -21,7 +21,7 @@ class DeadLockerTest {
 
   @Test
   void testDeadlockOnMonitorsBlocksThreadsOnBlocked() {
-    final DeadLocker deadLocker = new DeadLocker(false);
+    final DeadLocker deadLocker = new DeadLocker();
     new Thread(deadLocker::deadlockOnMonitors).start();
     while (!deadLocker.isFirstLockLocked() && !deadLocker.isSecondLockLocked()) {
       sleepUninterruptedly(1L);

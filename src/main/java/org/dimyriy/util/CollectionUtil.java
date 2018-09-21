@@ -9,6 +9,9 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 public class CollectionUtil {
+  private CollectionUtil() {
+  }
+
   public static <T extends Comparable<T>> void swap(@Nonnull final T[] arr, final int i, final int j) {
     final T t = arr[i];
     arr[i] = arr[j];
