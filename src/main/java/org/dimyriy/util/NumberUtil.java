@@ -1,5 +1,6 @@
 package org.dimyriy.util;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Random;
  * Created at 09.08.18
  */
 public class NumberUtil {
-  private static final Random RANDOM = new Random();
+  private static final Random RANDOM = new SecureRandom();
 
   private NumberUtil() {
   }
