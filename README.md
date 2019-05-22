@@ -3,4 +3,4 @@
 [![Coverage Status](https://coveralls.io/repos/github/dimyriy/algo/badge.svg)](https://coveralls.io/github/dimyriy/algo)
 
 # algo
-The repo contains implementations for most common Computer Science algorithms
+The repo contains implementations for some of the most common Computer Science algorithms
