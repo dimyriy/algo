@@ -6,14 +6,14 @@ import org.dimyriy.datastructures.tree.AvlTree;
  * @author Dmitrii Bogdanov
  * Created at 16.09.18
  */
-class LowestCommonAncestor {
+public class LowestCommonAncestor {
   private final AvlTree tree;
 
-  LowestCommonAncestor(final AvlTree tree) {
+  public LowestCommonAncestor(final AvlTree tree) {
     this.tree = tree;
   }
 
-  AvlTree.Node find(final int n1, final int n2) {
+  public AvlTree.Node find(final int n1, final int n2) {
     if (n1 == n2) {
       return tree.get(n1);
     }
