@@ -24,11 +24,8 @@
         <url>https://repo.maven.apache.org/maven2</url>
         <layout>default</layout>
         <snapshots>
-          <enabled>false</enabled>
+          <enabled>true</enabled>
         </snapshots>
-        <releases>
-          <updatePolicy>never</updatePolicy>
-        </releases>
       </pluginRepository>
     </pluginRepositories>
 
